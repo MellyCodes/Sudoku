@@ -58,12 +58,6 @@ public class OptionsState extends State{
             transitionToState = StateTransition.GAME;
             
         }
-        else if (scoresButton.hasClick()){
-            scoresButton.unClick();
-            transitionTimer = 50;
-            timedTransition = true;
-            transitionToState = StateTransition.SCOREBOARD;
-        }
         else if (quitButton.hasClick()){
             quitButton.unClick();
             transitionTimer = 50;

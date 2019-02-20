@@ -25,7 +25,7 @@ public class State extends JPanel{  // used to paint on it, it will cover the JF
     protected int width = 1600;
     protected int height = 900;
     
-    public static enum StateTransition {SPLASH, MENU, GAME, CREDITS, SCOREBOARD, EXIT}
+    public static enum StateTransition {SPLASH, MENU, OPTIONS, GAME, CREDITS, EXIT}
     protected StateTransition transitionToState = State.StateTransition.MENU;
     protected boolean transitionTriggered = false;
 

@@ -26,6 +26,8 @@ class CreditsState extends State{
         credits.add("for: Comprehensive Development Project");
         credits.add("Gaming Experience Development");
         credits.add("NBCC Moncton 2019");
+        credits.add("Special Thanks to Jeffery Ottar");
+        credits.add("For the name idea");
     }
     
     @Override

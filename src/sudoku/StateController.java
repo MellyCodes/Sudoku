@@ -19,13 +19,14 @@ public class StateController extends JFrame implements Runnable{
     
     private Thread gameLoop;   
     private SplashState splash;
+    private OptionsState options;
     private CreditsState credits;
     private GameState game;
     private MenuState menu;
     private State currentState;  
     
     public StateController(){
-        super("Wheel Of Fortune"); // inherits from JFrame constructor
+        super("Super Sudoku Seven"); // inherits from JFrame constructor
         setSize(new Dimension(WIDTH, HEIGHT)); // set dimensions
         setResizable(false); // cannot resize while during runtime
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // sets close button to exit
@@ -37,7 +38,11 @@ public class StateController extends JFrame implements Runnable{
         
         // Instantiate MenuState        
         menu = new MenuState();
-        menu.setSize(new Dimension(WIDTH, HEIGHT));       
+        menu.setSize(new Dimension(WIDTH, HEIGHT));     
+        
+        // Instantiate OptionsState
+        options = new OptionsState();
+        options.setSize(new Dimension(WIDTH, HEIGHT));
         
         // Instaniate GameState     
         game = new GameState();
@@ -89,6 +94,9 @@ public class StateController extends JFrame implements Runnable{
                     break;
                 case MENU:
                     currentState = menu;
+                    break;
+                case OPTIONS:
+                    currentState = options;
                     break;
                 case GAME:
                     currentState = game;

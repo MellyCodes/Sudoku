@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/wheeloffortune/Source.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>7</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group name="JavaBasic">
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaBasic/SwingPractice2/src/WheelOfFortune/Wheel.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaBasic/SwingPractice2/src/WheelOfFortune/StateController.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaBasic/SwingPractice2/src/WheelOfFortune/Simulation.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaBasic/SwingPractice2/src/WheelOfFortune/Menu.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaBasic/SwingPractice2/src/WheelOfFortune/SwingPractice2.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaBasic/SwingPractice2/src/WheelOfFortune/Game.java</file>
+        </group>
+        <group name="JavaEnterprise">
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/WheelOfFortune/src/wheeloffortune/Credits.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/WheelOfFortune/src/wheeloffortune/Source.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/WheelOfFortune/src/wheeloffortune/Wheel.java</file>
+        </group>
+        <group name="JavaSwing">
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/Button.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/GameState.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/MenuState.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/OptionsState.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/CreditsState.java</file>
+        </group>
+    </open-files>
+</project-private>

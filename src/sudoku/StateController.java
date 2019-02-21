@@ -103,8 +103,7 @@ public class StateController extends JFrame implements Runnable{
                     break;
                 case CREDITS:
                     currentState = credits;
-                    break;
-                
+                    break;                
                 case EXIT:
                     System.exit(0);
                     break;

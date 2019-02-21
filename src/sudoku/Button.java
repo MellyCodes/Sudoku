@@ -37,6 +37,14 @@ public class Button extends ImageEntity{
     private double yScale; // aspect ratio
     private double fontScale;   // font size relative to buttons     
     
+    /***
+     * 
+     * @param size
+     * @param position
+     * @param orientation
+     * @param buttonText
+     * @param type 
+     */
     public Button(int size, Point position, int orientation, String buttonText, ButtonType type) {        
         super(new Dimension(size, size), position, orientation);
         

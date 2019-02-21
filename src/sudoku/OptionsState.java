@@ -18,8 +18,7 @@ import java.awt.Point;
  */
 public class OptionsState extends State{
     private Button playButton;
-    private Button scoresButton;
-    private Button quitButton;
+    private Button menuButton;
     
     private ImageEntity banner;
     private int transitionTimer=0;
@@ -38,13 +37,11 @@ public class OptionsState extends State{
         playButton.slide(new Point((int)(0.5*width), (int)(0.4*height)), 10);
         addMouseListener(playButton);
         
-        scoresButton = new Button((int)(0.33*width), new Point((int)(-0.5*width), (int)(0.6*height)), 0, "Leaderboard", Button.ButtonType.MENU);
-        scoresButton.slide(new Point((int)(0.5*width), (int)(0.6*height)), 20);
-        addMouseListener(scoresButton);
+        menuButton = new Button((int)(0.33*width), new Point((int)(-0.5*width), (int)(0.6*height)), 0, "Main Menu", Button.ButtonType.MENU);
+        menuButton.slide(new Point((int)(0.5*width), (int)(0.6*height)), 20);
+        addMouseListener(menuButton);
         
-        quitButton = new Button((int)(0.33*width), new Point((int)(-0.7*width), (int)(0.8*height)), 0, "Quit", Button.ButtonType.MENU);
-        quitButton.slide(new Point((int)(0.5*width), (int)(0.8*height)), 30);
-        addMouseListener(quitButton);
+
     }    
     
     @Override
@@ -58,11 +55,11 @@ public class OptionsState extends State{
             transitionToState = StateTransition.GAME;
             
         }
-        else if (quitButton.hasClick()){
-            quitButton.unClick();
+        else if (menuButton.hasClick()){
+            menuButton.unClick();
             transitionTimer = 50;
             timedTransition = true;
-            transitionToState = StateTransition.CREDITS;
+            transitionToState = StateTransition.MENU;
         }
         
         if(transitionTimer>0){
@@ -74,8 +71,7 @@ public class OptionsState extends State{
             transitionTriggered = true;
         }
         playButton.update();
-        scoresButton.update();
-        quitButton.update();
+        menuButton.update();
         banner.update();        
     }          
            
@@ -83,8 +79,7 @@ public class OptionsState extends State{
     public void paintComponent(Graphics g){        
         super.paintComponent(g);
         playButton.paint(bufferedGraphics);        
-        scoresButton.paint(bufferedGraphics);
-        quitButton.paint(bufferedGraphics);
+        menuButton.paint(bufferedGraphics);
         banner.paint(bufferedGraphics);
         
         g.drawImage(imageBuffer, 0, 0,width, height, null);

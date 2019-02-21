@@ -32,15 +32,15 @@ import javax.swing.JTextField;
 public class GameState extends State{
 
     //private Image background;
-    private ImageEntity banner;
-    private Button hubButton;
+    //private ImageEntity banner;
+    private Button pauseButton;
     private Button menuButton;
     private Button buyVowelButton;
-    private Button solveButton;
+//    private Button solveButton;
     
     private ArrayList<String> puzzles = new ArrayList<String>();
-    private final int MAX_ROUNDS = 3;
-    private int currentRound = 1;
+//    private final int MAX_ROUNDS = 3;
+//    private int currentRound = 1;
        
     // game states
     private enum GameStates {ENTER_GAME, MAIN_OPTIONS, END_ROUND}
@@ -61,31 +61,34 @@ public class GameState extends State{
         super();     
         
         addBackground("resources/Blue-Background.jpg");
-        loadPuzzles();
+//        loadPuzzles();
                
         // create banner image and add animation
 //        banner = new ImageEntity(new Dimension((int)(0.4*width),(int) (0.3*height)), new Point((int)(width/2.0), (int) (-0.3*height)), 0);
 //        banner.addImage("resources/banner.png");
 //        banner.slide(new Point((int)(0.5*width), (int)(0.15*height)), 15);
-        
-        // vowel button and solve button.  owned by keyboard and moves with it
-        buyVowelButton = new Button((int)(width/12), new Point((int)(width*0.5), (int)(height * 1.35)), 
-                0, "Buy Vowel", Button.ButtonType.GAME);
-        addMouseListener(buyVowelButton);
-        
-        solveButton = new Button((int)(width/12), new Point((int)(width*0.6), (int)(height * 1.35)), 
-                0, "Solve", Button.ButtonType.GAME);
-        addMouseListener(solveButton);
-        
-        // spin button, owned by wheel
-        hubButton = new Button((int)(0.25*height), new Point((int)(-0.5*width), (int)(0.6*height)), 0, "Spin", Button.ButtonType.HUB);
-        addMouseListener(hubButton);        
-        
-        
-        
-        
+      
+
+        pauseButton = new Button((int) (0.25*width), new Point((int)(0.9*width), (int)(0.75*height)), 0, "Pause", Button.ButtonType.MENU);
+        addMouseListener(pauseButton);
+
         menuButton = new Button((int)(0.25*width), new Point((int)(0.9*width), (int)(0.85*height)), 0, "Menu", Button.ButtonType.MENU);
         addMouseListener(menuButton);
+        
+        
+
+        
+//         playButton = new Button((int)(0.33*width), new Point((int)(-0.3*width), (int)(0.4*height)), 0, "Play Game", Button.ButtonType.MENU);
+//        playButton.slide(new Point((int)(0.5*width), (int)(0.4*height)), 10);
+//        addMouseListener(playButton);
+//        
+//        optionsButton = new Button((int)(0.33*width), new Point((int)(-0.5*width), (int)(0.6*height)), 0, "Options", Button.ButtonType.MENU);
+//        optionsButton.slide(new Point((int)(0.5*width), (int)(0.6*height)), 20);
+//        addMouseListener(optionsButton);
+//        
+//        quitButton = new Button((int)(0.33*width), new Point((int)(-0.7*width), (int)(0.8*height)), 0, "Quit", Button.ButtonType.MENU);
+//        quitButton.slide(new Point((int)(0.5*width), (int)(0.8*height)), 30);
+//        addMouseListener(quitButton);
                
         
     }
@@ -95,9 +98,9 @@ public class GameState extends State{
         
         super.paintComponent(g);       
        
-        banner.paint(bufferedGraphics);
+        //banner.paint(bufferedGraphics);
+        pauseButton.paint(bufferedGraphics);
         menuButton.paint(bufferedGraphics);
-        solveButton.paint(bufferedGraphics);
         
         if(screenMessageCounter > 0){
             bufferedGraphics.setColor(Color.YELLOW);
@@ -117,6 +120,11 @@ public class GameState extends State{
             transitionToState = StateTransition.MENU;
             transitionTriggered = true;
         }
+        else if(pauseButton.hasClick()){
+            pauseButton.unClick();
+            transitionToState = StateTransition.OPTIONS;
+            transitionTriggered = true;
+        }
         if (gameSleepCounter > 0){
             gameSleepCounter--;
         }
@@ -127,56 +135,20 @@ public class GameState extends State{
                 switch (gameStates){
                     case ENTER_GAME:
                         newGame();                        
-                        enteringState = true;
-                        
+                        enteringState = true;                        
                         break;
                     case MAIN_OPTIONS:
                         if(enteringState){
                             enteringState = false;
                         // Entering state (setup)
-                            
-                           
-                                enteringState = true; 
-
+                            enteringState = true; 
                         }
                         break;
                     case END_ROUND:
                         // Entering state (setup)
                         if(enteringState){
                             enteringState = false;
-                            
-                            solveButton.setEnabled(false);                    
-                            
                          }
-                        else{                        
-                            // if next round exceeds 3 quit game
-                            if(currentRound >= MAX_ROUNDS){
-                                enteringState = true;                            
-
-                                
-
-                                
-                                
-                                                      
-
-                                transitionTimer=200; // Delay for exiting to menu at the end of 3 rounds
-                                timedTransition = true;
-                                
-                                
-                                enteringState = true;
-                                transitionToState = StateTransition.MENU;
-                                gameInPlay= false;
-                            }else{ 
-                                // otherwise move to next round
-                                currentRound++;
-                                
-                                
-                                sleep(200); 
-
-                                
-                                enteringState = true;
-                            }
-                        }
                         break;
                     default:
                         writeToScreen("unknown error", 100);
@@ -187,11 +159,10 @@ public class GameState extends State{
             /////////////////////////////////////////////////////////////////////
             //update GUI components
             
-            banner.update();
+            //banner.update();
            
-            menuButton.update();
-           
-            solveButton.update();
+            pauseButton.update();
+            menuButton.update();           
             
             
             //transition delay for exiting to menu
@@ -207,36 +178,36 @@ public class GameState extends State{
         }
     }
     
-    private void loadPuzzles(){
-        URL filePath = getClass().getResource("resources/puzzles.txt");
-                
-        String line = null;
-
-        try {
-            // FileReader reads text file
-            FileReader fileReader = 
-                new FileReader(new File(filePath.toURI()));
-                
-            // wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = 
-                new BufferedReader(fileReader);
-
-            while((line = bufferedReader.readLine()) != null) {                
-                puzzles.add(line);
-            }   
-
-            // close file
-            bufferedReader.close();         
-        }
-        catch(FileNotFoundException ex) {
-            writeToScreen("Unable to open file '", 150);                
-        }
-        catch(IOException ex) {
-            writeToScreen("Error reading file '", 150);            
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+//    private void loadPuzzles(){
+//        URL filePath = getClass().getResource("resources/puzzles.txt");
+//                
+//        String line = null;
+//
+//        try {
+//            // FileReader reads text file
+//            FileReader fileReader = 
+//                new FileReader(new File(filePath.toURI()));
+//                
+//            // wrap FileReader in BufferedReader.
+//            BufferedReader bufferedReader = 
+//                new BufferedReader(fileReader);
+//
+//            while((line = bufferedReader.readLine()) != null) {                
+//                puzzles.add(line);
+//            }   
+//
+//            // close file
+//            bufferedReader.close();         
+//        }
+//        catch(FileNotFoundException ex) {
+//            writeToScreen("Unable to open file '", 150);                
+//        }
+//        catch(IOException ex) {
+//            writeToScreen("Error reading file '", 150);            
+//        } catch (URISyntaxException ex) {
+//            Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
     
 
     
@@ -248,26 +219,27 @@ public class GameState extends State{
         //////////////////////////////////////////////////
         // reinitialize objects for new 3 round game /////
         //////////////////////////////////////////////////
-        currentRound = 1;
-        banner = new ImageEntity(new Dimension((int)(0.4*width),(int) (0.3*height)), new Point((int)(width/2.0), (int) (-0.3*height)), 0);
-        banner.addImage("resources/banner.png");
-        banner.slide(new Point((int)(0.5*width), (int)(0.15*height)), 15);
+//        banner = new ImageEntity(new Dimension((int)(0.4*width),(int) (0.3*height)), new Point((int)(width/2.0), (int) (-0.3*height)), 0);
+//        banner.addImage("resources/banner.png");
+//        banner.slide(new Point((int)(0.5*width), (int)(0.15*height)), 15);
         
-        buyVowelButton = new Button((int)(width/12), new Point((int)(width*0.5), (int)(height * 1.35)), 
-                0, "Buy Vowel", Button.ButtonType.GAME);
-        addMouseListener(buyVowelButton);
-        
-        solveButton = new Button((int)(width/12), new Point((int)(width*0.6), (int)(height * 1.35)), 
-                0, "Solve", Button.ButtonType.GAME);
-        addMouseListener(solveButton);
-        
-        hubButton = new Button((int)(0.25*height), new Point((int)(-0.5*width), (int)(0.6*height)), 0, "Spin", Button.ButtonType.HUB);
-        addMouseListener(hubButton);        
-        
+//        buyVowelButton = new Button((int)(width/12), new Point((int)(width*0.5), (int)(height * 1.35)), 
+//                0, "Buy Vowel", Button.ButtonType.GAME);
+//        addMouseListener(buyVowelButton);
+//        
+//        solveButton = new Button((int)(width/12), new Point((int)(width*0.6), (int)(height * 1.35)), 
+//                0, "Solve", Button.ButtonType.GAME);
+//        addMouseListener(solveButton);
+//        
+//        hubButton = new Button((int)(0.25*height), new Point((int)(-0.5*width), (int)(0.6*height)), 0, "Spin", Button.ButtonType.HUB);
+//        addMouseListener(hubButton);        
+//        
            
         
         menuButton = new Button((int)(0.25*width), new Point((int)(0.9*width), (int)(0.85*height)), 0, "Menu", Button.ButtonType.MENU);
         addMouseListener(menuButton);
+        
+
                 
         
     }

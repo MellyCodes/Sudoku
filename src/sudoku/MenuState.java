@@ -14,7 +14,7 @@ import java.awt.Point;
  */
 public class MenuState extends State{
     private Button playButton;
-    private Button scoresButton;
+    private Button optionsButton;
     private Button quitButton;
     
     private ImageEntity banner;
@@ -34,9 +34,9 @@ public class MenuState extends State{
         playButton.slide(new Point((int)(0.5*width), (int)(0.4*height)), 10);
         addMouseListener(playButton);
         
-        scoresButton = new Button((int)(0.33*width), new Point((int)(-0.5*width), (int)(0.6*height)), 0, "Leaderboard", Button.ButtonType.MENU);
-        scoresButton.slide(new Point((int)(0.5*width), (int)(0.6*height)), 20);
-        addMouseListener(scoresButton);
+        optionsButton = new Button((int)(0.33*width), new Point((int)(-0.5*width), (int)(0.6*height)), 0, "Options", Button.ButtonType.MENU);
+        optionsButton.slide(new Point((int)(0.5*width), (int)(0.6*height)), 20);
+        addMouseListener(optionsButton);
         
         quitButton = new Button((int)(0.33*width), new Point((int)(-0.7*width), (int)(0.8*height)), 0, "Quit", Button.ButtonType.MENU);
         quitButton.slide(new Point((int)(0.5*width), (int)(0.8*height)), 30);
@@ -54,6 +54,12 @@ public class MenuState extends State{
             transitionToState = StateTransition.GAME;
             
         }
+        else if (optionsButton.hasClick()){
+            optionsButton.unClick();
+            transitionTimer = 50;
+            timedTransition = true;
+            transitionToState = StateTransition.OPTIONS;
+        }
         else if (quitButton.hasClick()){
             quitButton.unClick();
             transitionTimer = 50;
@@ -70,7 +76,7 @@ public class MenuState extends State{
             transitionTriggered = true;
         }
         playButton.update();
-        scoresButton.update();
+        optionsButton.update();
         quitButton.update();
         banner.update();        
     }          
@@ -79,7 +85,7 @@ public class MenuState extends State{
     public void paintComponent(Graphics g){        
         super.paintComponent(g);
         playButton.paint(bufferedGraphics);        
-        scoresButton.paint(bufferedGraphics);
+        optionsButton.paint(bufferedGraphics);
         quitButton.paint(bufferedGraphics);
         banner.paint(bufferedGraphics);
         

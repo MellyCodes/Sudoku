@@ -40,8 +40,6 @@ public class OptionsState extends State{
         menuButton = new Button((int)(0.33*width), new Point((int)(-0.5*width), (int)(0.6*height)), 0, "Main Menu", Button.ButtonType.MENU);
         menuButton.slide(new Point((int)(0.5*width), (int)(0.6*height)), 20);
         addMouseListener(menuButton);
-        
-
     }    
     
     @Override

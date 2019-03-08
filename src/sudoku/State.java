@@ -50,8 +50,7 @@ public class State extends JPanel{  // used to paint on it, it will cover the JF
         
         bufferedGraphics.setTransform(at);
         bufferedGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, 
-                                          RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        
+                                          RenderingHints.VALUE_TEXT_ANTIALIAS_ON);        
     }
     
     @Override

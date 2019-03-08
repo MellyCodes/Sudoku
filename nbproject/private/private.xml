@@ -29,10 +29,14 @@
             <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/GameState.java</file>
             <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/MenuState.java</file>
             <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/OptionsState.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/Tile.java</file>
             <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/CreditsState.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/TileBoard.java</file>
             <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/StateController.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/Source.java</file>
             <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/State.java</file>
             <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/SplashState.java</file>
+            <file>file:/C:/Users/melan/Documents/NetBeansProjects/JavaSwing/Sudoku/src/sudoku/ImageEntity.java</file>
         </group>
     </open-files>
 </project-private>

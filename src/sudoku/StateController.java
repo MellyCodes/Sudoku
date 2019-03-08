@@ -50,12 +50,11 @@ public class StateController extends JFrame implements Runnable{
         
         // instantiate CreditsState
         credits = new CreditsState();
-        credits.setSize(new Dimension(WIDTH, HEIGHT));
-        
+        credits.setSize(new Dimension(WIDTH, HEIGHT));      
        
         
-        // set current sim to splash
-        //  add current sim
+        // set current state to splash
+        //  add current state
         currentState = splash;
         add(currentState);        
         

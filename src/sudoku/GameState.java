@@ -22,23 +22,11 @@ public class GameState extends State {
     private Button pauseButton;
     private Button menuButton;
 
-    private Tile[] tiles = new Tile[9];
+    private Tile[] tiles = new Tile[81];
 
-//    private Tile number1Tile;
-//    private Tile number2Tile;
-//    private Tile number3Tile;
-//    private Tile number4Tile;
-//    private Tile number5Tile;
-//    private Tile number6Tile;
-//    private Tile number7Tile;
-//    private Tile number8Tile;
-//    private Tile number9Tile;
+    private Puzzle puzzle;
 
-    private TileBoard target;
-
-    private ArrayList<String> puzzles = new ArrayList<String>();
-//    private final int MAX_ROUNDS = 3;
-//    private int currentRound = 1;
+    private TileBoard tileBoard;
 
     // game states
     private enum GameStates {
@@ -62,12 +50,28 @@ public class GameState extends State {
 
         addBackground("resources/Blue-Background.jpg");
 
-//        loadPuzzles();
-        // create banner image and add animation
-//        banner = new ImageEntity(new Dimension((int)(0.4*width),(int) (0.3*height)), new Point((int)(width/2.0), (int) (-0.3*height)), 0);
-//        banner.addImage("resources/banner.png");
-//        banner.slide(new Point((int)(0.5*width), (int)(0.15*height)), 15);
-        target = new TileBoard(new Dimension((int) (0.72 * height), (int) (0.72 * height)), new Point((int) (0.4 * height), (int) (0.4 * height)));
+        String puzzleString = "2 4 8 5 3 9 6 7 1 6 7 5 4 1 2 8 9 3 3 9 1 6 7 8 2 4 5 7 1 2 8 6 3 9 5 4 4 3 6 1 9 5 7 8 2 5 8 9 2 4 7 1 3 6 8 2 4 9 5 6 3 1 7 9 5 7 3 2 1 4 6 8 1 6 3 7 8 4 5 2 9";
+        String maskString = "1 1 0 0 0 1 1 1 1 1 1 0 1 0 0 1 1 1 0 0 0 1 1 1 1 1 1 0 1 1 1 1 0 1 0 1 0 0 1 1 1 1 1 0 0 1 0 1 0 1 1 1 1 0 1 1 1 1 1 1 0 0 0 1 1 1 0 0 1 0 1 1 1 1 1 1 0 0 0 1 1";
+
+        puzzle = new Puzzle(puzzleString, maskString);
+
+        tileBoard = new TileBoard(new Dimension((int) (0.72 * height), (int) (0.72 * height)), new Point((int) (0.4 * height), (int) (0.4 * height)));
+
+        //creating tiles
+        for (int i = 0; i < 81; i++) {
+            if (puzzle.elementAtIndex(i) != 0) {
+                tiles[i] = new Tile(new Dimension((int) (height * 0.08), (int) (height * 0.08)),
+                        tileBoard.anchorAtIndex(i),
+                        puzzle.elementAtIndex(i));
+            } else {
+
+                tiles[i] = new Tile(new Dimension((int) (height * 0.08), (int) (height * 0.08)),
+                        new Point((int) (width / 2), (int) (height / 2)),
+                        9);
+                addMouseListener(tiles[i]);
+                addMouseMotionListener(tiles[i]);
+            }
+        }
 
         pauseButton = new Button((int) (0.25 * width), new Point((int) (0.9 * width), (int) (0.75 * height)), 0, "Pause", Button.ButtonType.MENU);
         addMouseListener(pauseButton);
@@ -77,17 +81,14 @@ public class GameState extends State {
 
         int xOffset = (int) (0.01 * height);
         //int xStart = (int)();
-        
-        
+
         // create and place tiles
-        for (int i = 0; i < tiles.length; i++) {
-            tiles[i] = new Tile(new Dimension((int) (height * 0.08), (int) (height * 0.08)), new Point((int) ((height * 0.11) + i * (height * 0.11)), (int) (height * 0.85)), i + 1);
-            addMouseListener(tiles[i]);
-            addMouseMotionListener(tiles[i]);
-
-        }
-
-
+//        for (int i = 0; i < tiles.length; i++) {
+//            tiles[i] = new Tile(new Dimension((int) (height * 0.08), (int) (height * 0.08)), new Point((int) ((height * 0.11) + i * (height * 0.11)), (int) (height * 0.85)), i + 1);
+//            addMouseListener(tiles[i]);
+//            addMouseMotionListener(tiles[i]);
+//
+//        }
     }
 
     @Override
@@ -95,7 +96,7 @@ public class GameState extends State {
 
         super.paintComponent(g);
 
-        target.paint(bufferedGraphics);
+        tileBoard.paint(bufferedGraphics);
         //banner.paint(bufferedGraphics);
         pauseButton.paint(bufferedGraphics);
         menuButton.paint(bufferedGraphics);
@@ -103,16 +104,6 @@ public class GameState extends State {
         for (int i = 0; i < tiles.length; i++) {
             tiles[i].paint(bufferedGraphics);
         }
-
-//        number1Tile.paint(bufferedGraphics);
-//        number2Tile.paint(bufferedGraphics);
-//        number3Tile.paint(bufferedGraphics);
-//        number4Tile.paint(bufferedGraphics);
-//        number5Tile.paint(bufferedGraphics);
-//        number6Tile.paint(bufferedGraphics);
-//        number7Tile.paint(bufferedGraphics);
-//        number8Tile.paint(bufferedGraphics);
-//        number9Tile.paint(bufferedGraphics);
 
         if (screenMessageCounter > 0) {
             bufferedGraphics.setColor(Color.YELLOW);
@@ -172,23 +163,21 @@ public class GameState extends State {
             //banner.update();
             pauseButton.update();
             menuButton.update();
-            
-            
+
             // Collision detection - was the tile dropped
-            for (int i = 0; i < tiles.length; i++) { 
-                
-                if(tiles[i].isDropped()){
+            for (int i = 0; i < tiles.length; i++) {
+
+                if (tiles[i].isDropped()) {
                     tiles[i].setDropped(false);
-                    target.tileDropped(tiles[i]);                  
-                }               
+                    tileBoard.tileDropped(tiles[i]);
+                }
             }
-            
-            
-            for (int i = 0; i < tiles.length; i++) {               
+
+            for (int i = 0; i < tiles.length; i++) {
                 tiles[i].update();
             }
 
-            target.update();
+            tileBoard.update();
 
             //transition delay for exiting to menu
             if (transitionTimer > 0) {

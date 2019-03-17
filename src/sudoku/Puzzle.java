@@ -26,11 +26,18 @@ public class Puzzle {
 
     }
     
-    public int elementAtIndex(int index){
-        if(!mask[index])
-            return puzzle[index]; 
+    public int maskedElementAtIndex(int index){
         
-        return 0;    
+        if(!mask[index])
+            return puzzle[index];
+        return 0;
+        
+    }
+    
+    public int elementAtIndex(int index){
+        
+        return puzzle[index];         
+  
     }
 
 //    public boolean guessDigit(int pos, int guess) {
@@ -63,26 +70,7 @@ public class Puzzle {
         line.close();
     }
 
-    /**
-     * *
-     * returns the current puzzle with remaining masks applied
-     *
-     * @return
-     */
-    public int[] getCurrentMaskedPuzzle() {
-        int[] currentMaskedPuzzle = new int[81];
-
-        for (int i = 0; i < 81; i++) {
-            // Setting an element to false uncovers a hint
-            if (!mask[i]) {
-                currentMaskedPuzzle[i] = puzzle[i];
-            } else {
-                currentMaskedPuzzle[i] = 0;
-            }
-        }
-
-        return currentMaskedPuzzle;
-    }
+    
 
     /**
      * *
@@ -94,11 +82,23 @@ public class Puzzle {
 
         for (int j = 0; j < 81; j++) {
             //as soon as the check is false the puzzle is not solved
-            if (!mask[j]) {
+            if (mask[j]) {
                 return false;
             }
         }
         return true;
+    }
+    
+    public boolean makeMove(Move move){
+        if (mask[move.getIndex()]){
+            // Puzzle has empty slot
+            if(puzzle[move.getIndex()]== move.getValue()){ // Correct guess
+                mask[move.getIndex()]= false; // Add the guess
+                return true;                
+            }
+        }
+        return false; // Guess was wrong
+    
     }
 
 }

@@ -29,8 +29,7 @@ public class Tile extends ImageEntity implements MouseMotionListener{
     
     private boolean dropped = false;
     
-    //protected enum TileValue{ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE}
-    
+      
     private ArrayList<String> imagePaths = new ArrayList<String>(){{
         add("resources/TileOne.png");add("resources/TileTwo.png");add("resources/TileThree.png");
         add("resources/TileFour.png");add("resources/TileFive.png");add("resources/TileSix.png");
@@ -43,26 +42,14 @@ public class Tile extends ImageEntity implements MouseMotionListener{
         
         this.value = value;
         
-        
-        
         home = position;
         isDraggable = true;
         isDragging = false;
         //showBoundingBox();
         
-       
-        
-        
-        
         addImage(imagePaths.get(value - 1));
         
-
-        
-        
     }   
-    
-    
-    
 
     public int getValue() {
         return value;
@@ -104,11 +91,8 @@ public class Tile extends ImageEntity implements MouseMotionListener{
         this.dropped = dropped;
     }
     
-    
-    
-    
     public void snapHome(){
-        //TODO
+        
         slide(home, 25);
     }
     
@@ -141,7 +125,6 @@ public class Tile extends ImageEntity implements MouseMotionListener{
         if(isDraggable){
             if(contains(e.getPoint())){
                 setIsDragging(false);
-                //snapHome();
                 setDropped(true);             
             }
         }        
@@ -158,7 +141,6 @@ System.out.println("Mouse Dragged");
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        //TODO
         ;
     }
 

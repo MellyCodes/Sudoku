@@ -39,12 +39,12 @@ public class StateController extends JFrame implements Runnable{
     private final int HEIGHT = 900;
     private final int REFRESH_TIME = 1000/50;
     
-    private final Thread gameLoop;   
-    private final SplashState splash;
-    private final OptionsState options;
-    private final CreditsState credits;
-    private final GameState game;
-    private final MenuState menu;
+    private Thread gameLoop;   
+    private SplashState splash;
+    private OptionsState options;
+    private CreditsState credits;
+    private GameState game;
+    private MenuState menu;
     private State currentState;  
     
     public StateController(){

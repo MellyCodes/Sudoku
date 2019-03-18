@@ -33,8 +33,8 @@ package sudoku;
  */
 public class Move {
     
-    private final int index;
-    private final int value;
+    private int index;
+    private int value;
     
     public Move(int index, int value){
         this.index = index;

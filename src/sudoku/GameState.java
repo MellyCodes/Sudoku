@@ -39,13 +39,13 @@ import java.awt.Point;
 public class GameState extends State {
 
     //Set up the model
-    private final PuzzleManager puzzleManager = new PuzzleManager();
+    private PuzzleManager puzzleManager = new PuzzleManager();
     private Puzzle puzzle;
 
     // Set up visual components
-    private final Button pauseButton;
-    private final Button menuButton;
-    private final Tile[] tiles = new Tile[81];    // All the tiles, whether on the board or not
+    private Button pauseButton;
+    private Button menuButton;
+    private Tile[] tiles = new Tile[81];    // All the tiles, whether on the board or not
     private Tile tileInPlay = null;         // A Tile that has been dragged or just dropped
     private TileBoard tileBoard;            // Represents the Sudoku puzzle visually
     private TileStacks tileStacks;          // Number of tiles the player can pick up and drop on the board

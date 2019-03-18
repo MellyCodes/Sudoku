@@ -1,7 +1,29 @@
-/*
- * This assignment represents my own work and is in accordance with the College Academic Policy
- * Melanie Roy-Plommer - Gex 2018
- */
+/**
+* @file StateCntroller.java
+* @author Melanie Roy-Plommer
+* @version 1.0
+*
+* @section DESCRIPTION
+* <  >
+*
+* @section LICENSE
+* Copyright 2018 - 2019
+* Permission to use, copy, modify, and/or distribute this software for
+* any purpose with or without fee is hereby granted, provided that the
+* above copyright notice and this permission notice appear in all copies.
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+* ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+* WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+* ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*
+* @section Academic Integrity
+* I certify that this work is solely my own and complies with
+* NBCC Academic Integrity Policy (policy 1111)
+*/
 package sudoku;
 
 import java.awt.Dimension;
@@ -9,7 +31,7 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author melan
+ * @author Melanie Roy-Plommer
  */
 
 public class StateController extends JFrame implements Runnable{
@@ -17,12 +39,12 @@ public class StateController extends JFrame implements Runnable{
     private final int HEIGHT = 900;
     private final int REFRESH_TIME = 1000/50;
     
-    private Thread gameLoop;   
-    private SplashState splash;
-    private OptionsState options;
-    private CreditsState credits;
-    private GameState game;
-    private MenuState menu;
+    private final Thread gameLoop;   
+    private final SplashState splash;
+    private final OptionsState options;
+    private final CreditsState credits;
+    private final GameState game;
+    private final MenuState menu;
     private State currentState;  
     
     public StateController(){

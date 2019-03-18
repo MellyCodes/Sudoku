@@ -1,7 +1,29 @@
-/*
- * This assignment represents my own work and is in accordance with the College Academic Policy
- * Melanie Roy-Plommer - Gex 2018
- */
+/**
+* @file ImageEntity.java
+* @author Melanie Roy-Plommer
+* @version 1.0
+*
+* @section DESCRIPTION
+* <  >
+*
+* @section LICENSE
+* Copyright 2018 - 2019
+* Permission to use, copy, modify, and/or distribute this software for
+* any purpose with or without fee is hereby granted, provided that the
+* above copyright notice and this permission notice appear in all copies.
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+* ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+* WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+* ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*
+* @section Academic Integrity
+* I certify that this work is solely my own and complies with
+* NBCC Academic Integrity Policy (policy 1111)
+*/
 package sudoku;
 
 import java.awt.Dimension;
@@ -18,7 +40,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author melan
+ * @author Melanie Roy-Plommer
  */
 public class ImageEntity implements MouseListener{    
     
@@ -48,7 +70,7 @@ public class ImageEntity implements MouseListener{
     protected Point endPosition;
     
     // for ImagesEntities that have a "has-a" relationship
-    protected ArrayList<ImageEntity> ownedEntities = new ArrayList<ImageEntity>();    
+    protected ArrayList<ImageEntity> ownedEntities = new ArrayList<>();    
     
     //toolkit for loading images
     protected Toolkit toolkit;
@@ -67,7 +89,7 @@ public class ImageEntity implements MouseListener{
         
         // set up images
         toolkit = Toolkit.getDefaultToolkit();
-        images = new ArrayList<Image>();               
+        images = new ArrayList<>();               
     }
     
     // functionality 
@@ -122,6 +144,8 @@ public class ImageEntity implements MouseListener{
             }        
         }        
     }
+    
+    @SuppressWarnings("empty-statement")
     public void reset(){;}
     
     public boolean contains(Point point){
@@ -216,18 +240,23 @@ public class ImageEntity implements MouseListener{
     }
 
     @Override
+    @SuppressWarnings("empty-statement")
     public void mouseClicked(MouseEvent e) {;}
 
     @Override
+    @SuppressWarnings("empty-statement")
     public void mousePressed(MouseEvent e)  {;}
 
     @Override
+    @SuppressWarnings("empty-statement")
     public void mouseReleased(MouseEvent e)  {;}
 
     @Override
+    @SuppressWarnings("empty-statement")
     public void mouseEntered(MouseEvent e)  {;}
 
     @Override
+    @SuppressWarnings("empty-statement")
     public void mouseExited(MouseEvent e)  {;}
     
 }

@@ -56,6 +56,8 @@ public class Button extends ImageEntity{
         add("resources/buttons/gameButtonUp.png");add("resources/buttons/gameButtonDown.png");add("resources/buttons/gameButtonDisabled.png");       
     }};
     
+    private String value = "";
+    
     private double yScale; // aspect ratio
     private double fontScale;   // font size relative to buttons     
     
@@ -166,12 +168,28 @@ public class Button extends ImageEntity{
         }
     }
     
+    public void setSize(int size){
+        super.setSize(new Dimension(size, (int)(size * yScale)));
+    }
+    
     public void setTextColor(Color color) {
         textColor = color;
     }
     
     public void setButtonText(String text){
         buttonText = text;
+    }
+    
+    public void setIsEnabled(boolean isEnabled){
+        this.isEnabled = isEnabled;
+    }
+    
+    public void setValue(String value){
+        this.value = value;
+    }
+    
+    public String getValue(){
+        return this.value;
     }
     
     public boolean hasClick(){

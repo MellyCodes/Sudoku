@@ -47,6 +47,8 @@ public class StateController extends JFrame implements Runnable{
     private MenuState menu;
     private State currentState;  
     
+    private SoundManager sounds = new SoundManager(); 
+    
     public StateController(){
         super("Super Sudoku Seven"); // inherits from JFrame constructor
         setSize(new Dimension(WIDTH, HEIGHT)); // set dimensions
@@ -54,25 +56,35 @@ public class StateController extends JFrame implements Runnable{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // sets close button to exit
         setVisible(true); // shows JFrame    
         
+        // Load sounds
+        sounds.addSound("background", "resources/sounds/oceanwaves.wav");
+        sounds.addSound("tilehome", "resources/sounds/tileHome.wav");
+        sounds.addSound("tileaccepted", "resources/sounds/tileAccepted.wav");
+        
         // Instantiate SplashState   
         splash = new SplashState();
         splash.setSize(new Dimension(WIDTH, HEIGHT));
+        splash.setSoundManager(sounds);
         
         // Instantiate MenuState        
         menu = new MenuState();
-        menu.setSize(new Dimension(WIDTH, HEIGHT));     
+        menu.setSize(new Dimension(WIDTH, HEIGHT));    
+        menu.setSoundManager(sounds);
         
         // Instantiate OptionsState
         options = new OptionsState();
         options.setSize(new Dimension(WIDTH, HEIGHT));
+        options.setSoundManager(sounds);
         
         // Instaniate GameState     
         game = new GameState();
         game.setSize(new Dimension(WIDTH, HEIGHT));
+        game.setSoundManager(sounds);
         
         // instantiate CreditsState
         credits = new CreditsState();
-        credits.setSize(new Dimension(WIDTH, HEIGHT));      
+        credits.setSize(new Dimension(WIDTH, HEIGHT)); 
+        credits.setSoundManager(sounds);
        
         
         // set current state to splash

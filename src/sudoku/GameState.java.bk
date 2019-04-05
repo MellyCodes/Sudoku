@@ -1,7 +1,29 @@
-/*
- * This assignment represents my own work and is in accordance with the College Academic Policy
- * Melanie Roy-Plommer - Gex 2018
- */
+/**
+* @file GameState.java
+* @author Melanie Roy-Plommer
+* @version 1.0
+*
+* @section DESCRIPTION
+* <  >
+*
+* @section LICENSE
+* Copyright 2018 - 2019
+* Permission to use, copy, modify, and/or distribute this software for
+* any purpose with or without fee is hereby granted, provided that the
+* above copyright notice and this permission notice appear in all copies.
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+* ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+* WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+* ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*
+* @section Academic Integrity
+* I certify that this work is solely my own and complies with
+* NBCC Academic Integrity Policy (policy 1111)
+*/
 package sudoku;
 
 import java.awt.Color;
@@ -12,24 +34,21 @@ import java.awt.Point;
 
 /**
  *
- * @author melan
+ * @author Melanie Roy-Plommer
  */
 public class GameState extends State {
 
-    // Set up the model.
+    //Set up the model
     private PuzzleManager puzzleManager = new PuzzleManager();
     private Puzzle puzzle;
 
     // Set up visual components
     private Button pauseButton;
     private Button menuButton;
-    private Tile[] tiles = new Tile[81];	// All the number tiles (on board and off)
-    private Tile tileInPlay = null;		// A tile that has been dragged or just dropped
-    private TileBoard tileBoard;		// Represents the sudoku puzzle visually
-    private TileStacks tilestacks;		// Number tiles the player can pick up and drop on the board
-    private Clock timer;
-    private Dialog1Q chooseDificultyDialogue;
-    private Dialog1Q playAgainDialogue;
+    private Tile[] tiles = new Tile[81];    // All the tiles, whether on the board or not
+    private Tile tileInPlay = null;         // A Tile that has been dragged or just dropped
+    private TileBoard tileBoard;            // Represents the Sudoku puzzle visually
+    private TileStacks tileStacks;          // Number of tiles the player can pick up and drop on the board
 
     // game states
     private enum GameStates {
@@ -41,10 +60,12 @@ public class GameState extends State {
     private boolean enteringState = true;
     private boolean showingSwingDialog = false;
     private boolean gameInPlay = true;
-    private boolean gamePaused = false;
     private int gameSleepCounter = 0;
-    private int transitionTimer = 0; // transition out to main menu
-    private boolean timedTransition = false; // transition out to main menu
+
+    // transition out to main menu
+    private int transitionTimer = 0;
+    private boolean timedTransition = false;
+
 
     public GameState() {
         super();
@@ -53,24 +74,6 @@ public class GameState extends State {
 
         puzzle = puzzleManager.getCurrentPuzzle();
         initializeVisualComponents();
-
-        // set up dialogues
-        chooseDificultyDialogue = new Dialog1Q(new Dimension((int) (width * 0.6), (int) (height * 0.6)), new Point((int) (width * 0.5), (int) (height * 0.5)),
-                "Choose a dificulty:");
-        chooseDificultyDialogue.addButton("Easy", "easy");
-        chooseDificultyDialogue.addButton("Medium", "medium");
-        chooseDificultyDialogue.addButton("Hard", "hard");
-        addMouseListener(chooseDificultyDialogue);
-        chooseDificultyDialogue.setVisible(false);
-        chooseDificultyDialogue.setEnabled(false);
-
-        playAgainDialogue = new Dialog1Q(new Dimension((int) (width * 0.6), (int) (height * 0.6)), new Point((int) (width * 0.5), (int) (height * 0.5)),
-                "PLay Again?:");
-        playAgainDialogue.addButton("Yes", "yes");
-        playAgainDialogue.addButton("No", "no");
-        addMouseListener(playAgainDialogue);
-        playAgainDialogue.setVisible(false);
-        playAgainDialogue.setEnabled(false);
 
         pauseButton = new Button((int) (0.25 * width), new Point((int) (0.9 * width), (int) (0.75 * height)), 0, "Pause", Button.ButtonType.MENU);
         addMouseListener(pauseButton);
@@ -86,29 +89,21 @@ public class GameState extends State {
         super.paintComponent(g);
 
         tileBoard.paint(bufferedGraphics);
-        tilestacks.paint(bufferedGraphics);
+        tileStacks.paint(bufferedGraphics);
         pauseButton.paint(bufferedGraphics);
         menuButton.paint(bufferedGraphics);
 
-        for (int i = 0; i < tiles.length; i++) {
-            tiles[i].paint(bufferedGraphics);
-        }
-
-        if (tileBoard.isBoardHidden()) {
-            tileBoard.paint(bufferedGraphics);
+        for (Tile tile : tiles) {
+            tile.paint(bufferedGraphics);
         }
 
         if (tileInPlay != null) {
             tileInPlay.paint(bufferedGraphics);
         }
 
-        timer.paint(bufferedGraphics);
-        chooseDificultyDialogue.paint(bufferedGraphics);
-        playAgainDialogue.paint(bufferedGraphics);
-
         if (screenMessageCounter > 0) {
             bufferedGraphics.setColor(Color.YELLOW);
-            bufferedGraphics.setFont(new Font("TimesRoman", Font.BOLD, 30));
+            bufferedGraphics.setFont(new Font("TimesRoman", Font.BOLD, 60));
             bufferedGraphics.drawString(screenMessage, (int) ((width - screenMessageLength) / 2), (int) (height / 2));
         }
         g.drawImage(imageBuffer, 0, 0, width, height, null);
@@ -117,30 +112,16 @@ public class GameState extends State {
     @Override
     public void update() {
         super.update();
-        if (animationCounter == 10) {
-            sounds.changeBackgroundSound("resources/sounds/mandown.wav");
-        }
 
         // back to menu
         if (menuButton.hasClick()) {
             menuButton.unClick();
-            animationCounter = 0;
             transitionToState = StateTransition.MENU;
             transitionTriggered = true;
         } else if (pauseButton.hasClick()) {
             pauseButton.unClick();
-            if (timer.isRunning()) {
-                timer.stop();
-                tileBoard.hideBoard(true);
-                sounds.pauseBackgroundSound();
-                gamePaused = true;
-            } else {
-                timer.start();
-                tileBoard.hideBoard(false);
-                sounds.unpauseBackgroundSound();
-                gamePaused = false;
-            }
-
+            transitionToState = StateTransition.OPTIONS;
+            transitionTriggered = true;
         }
         if (gameSleepCounter > 0) {
             gameSleepCounter--;
@@ -153,31 +134,21 @@ public class GameState extends State {
                         if (enteringState) {
                             enteringState = false;
                             // Entering state (setup)
-                            chooseDificultyDialogue.setVisible(true);
-                            chooseDificultyDialogue.setEnabled(true);
-
+                            writeToScreen("Entering choose dificulty state", 100);
+                            sleep(150);
                         } // else already in state
 
                         // upon state transition
-                        if (chooseDificultyDialogue.getHasAnswer()) {
-                            chooseDificultyDialogue.getAnswer();
-                            chooseDificultyDialogue.setVisible(false);
-                            chooseDificultyDialogue.setEnabled(false);
-
-                            gameState = GameStates.SETUP;
-                            enteringState = true;
-                        }
-
+                        gameState = GameStates.SETUP;
+                        enteringState = true;
                         break;
                     case SETUP:
                         if (enteringState) {
                             enteringState = false;
                             // Entering state (setup)
+                            writeToScreen("setup", 100);
                             puzzle = puzzleManager.getCurrentPuzzle();
                             initializeVisualComponents();
-                            tilestacks.unlockTiles();
-                            tileBoard.hideBoard(false);
-                            timer.start();
 
                         } // else already in state
 
@@ -191,23 +162,21 @@ public class GameState extends State {
                             enteringState = false;
                             // Entering state (setup)
                             writeToScreen("tilesunclicked", 100);
-                            tilestacks.lockTiles();
-                            tilestacks.unlockTiles();
+                            tileStacks.lockTiles();
+                            tileStacks.unlockTiles();
 
                         } // else already in state
-                        // listen for tile being dragged
-                        for (int i = 0; i < tiles.length; i++) {
-                            if (tiles[i].getIsDragging()) {
-                                tileInPlay = tiles[i];
-                                tilestacks.popTile(tileInPlay);
-                                tilestacks.lockTiles();
-
-                                // upon state transition
-                                gameState = GameStates.DRAGGING_TILE;
-                                enteringState = true;
-                            }
-                        }
-
+                // listen for tile being dragged
+                for (Tile tile : tiles) {
+                    if (tile.getIsDragging()) {
+                        tileInPlay = tile;
+                        tileStacks.popTile(tileInPlay);
+                        tileStacks.lockTiles();
+                        // upon state transition
+                        gameState = GameStates.DRAGGING_TILE;
+                        enteringState = true;
+                    }
+                }
                         break;
                     case DRAGGING_TILE:
                         if (enteringState) {
@@ -222,17 +191,18 @@ public class GameState extends State {
                             tileInPlay.setDropped(false);
                             // check if dropped on board
                             if (!tileBoard.hasMove()) { // not on board
-                                tilestacks.pushTile(tileInPlay);
+                                tileStacks.pushTile(tileInPlay);
                                 tileInPlay.snapHome();
                                 gameState = GameStates.MISS_BOARD;
                             } else { // tile was dropped on board
                                 Move theMove = tileBoard.getMove();
+                                System.out.println(theMove.getIndex() + " , " + theMove.getValue());
                                 if (puzzle.makeMove(theMove)) { // move is good!!
                                     tileBoard.acceptMove(theMove, tileInPlay);
                                     tileInPlay.snapHome();
                                     gameState = GameStates.BOARD_ACCEPTS;
                                 } else { // move is bad
-                                    tilestacks.pushTile(tileInPlay);
+                                    tileStacks.pushTile(tileInPlay);
                                     tileInPlay.snapHome();
                                     gameState = GameStates.BOARD_REJECTS;
                                 }
@@ -241,16 +211,14 @@ public class GameState extends State {
                             enteringState = true;
                             //tileBoard.tileDropped(tiles[i]);
                         }
-
                         break;
                     case MISS_BOARD:
                         if (enteringState) {
                             enteringState = false;
-                            sounds.playSound("tilehome", 1);
                             // Entering state (setup)
                             writeToScreen("miss", 100);
 
-                        } // else already in state
+                        } // Checks if the tile has reached its home position yet
                         if (tileInPlay.getHome().equals(tileInPlay.getPosition())) {
                             tileInPlay = null;
                             gameState = GameStates.TILES_UNCLICKED;
@@ -262,29 +230,25 @@ public class GameState extends State {
                         if (enteringState) {
                             enteringState = false;
                             // Entering state (setup)
-                            writeToScreen("Wrong Guess: 10s Penalty!", 100);
-                            timer.timePenalty(10);
+                            writeToScreen("reject", 100);
 
                         } // else already in state
 
-                        // upon state transition
+                        // Checks if the tile has reached its home position yet
                         if (tileInPlay.getHome().equals(tileInPlay.getPosition())) {
                             tileInPlay = null;
                             gameState = GameStates.TILES_UNCLICKED;
                             enteringState = true;
-
                         }
-
                         break;
                     case BOARD_ACCEPTS:
                         if (enteringState) {
                             enteringState = false;
-                            //System.out.println("what da fugicle??");
-                            sounds.playSound("tileaccepted", 1);
                             // Entering state (setup)
-                            //writeToScreen("accept", 100);
-
-                        } // else already in state
+                            writeToScreen("accept", 100);
+                        } 
+                        // Checks if the tile has reached its home position yet
+                        // In this case, the home position has already been changed in TileBoard to the correct square
                         if (tileInPlay.getHome().equals(tileInPlay.getPosition())) {
                             tileInPlay = null;
                             // has game been won?
@@ -303,51 +267,29 @@ public class GameState extends State {
                         if (enteringState) {
                             enteringState = false;
                             // Entering state (setup)
-                            writeToScreen("YOU WIN!!!", 100);
-                            timer.stop();
-                            //System.out.println("has answer?" + playAgainDialogue.getHasAnswer());
-                            playAgainDialogue.setVisible(true);
-                            playAgainDialogue.setEnabled(true);
-                            playAgainDialogue.getAnswer();
-                            puzzleManager.markPuzzleComplete();
-                            puzzleManager.loadNextPuzzle();
+                            writeToScreen("YOU WIN!!!.. PLAY_AGAIN?", 100);
+                            sleep(150);
+
                         } // else already in state
-                        if (playAgainDialogue.getHasAnswer()) {
 
-                            String play = playAgainDialogue.getAnswer();
-                            System.out.println("dialogue says: " + play);
-                            playAgainDialogue.setVisible(false);
-                            playAgainDialogue.setEnabled(false);
-
-                            if (play.equals("yes")) {
-                                gameState = GameStates.SETUP;
-                                enteringState = true;
-                            } else {
-                                gameState = GameStates.EXIT;
-                                enteringState = true;
-                            }
-
-                        }
+                        // Exit for now just remains in the current state
+                        // Will transition to main menu in the future
+                        gameState = GameStates.EXIT;
+                        enteringState = true;
 
                         break;
                     case EXIT:
                         if (enteringState) {
                             enteringState = false;
                             // Entering state (setup)
-
-                        } // else already in state
-                        // Set up for next game
-                        enteringState = true;
-                        gameState = GameStates.CHOOSE_DIFICULTY;
-                        // Game over - back to menu
-                        animationCounter = 0;
-                        transitionToState = StateTransition.MENU;
-                        transitionTriggered = true;
-
+                            writeToScreen("EXIT", 100);
+                            sleep(150);
+                        }
                         break;
                     default:
                         writeToScreen("unknown error", 100);
                         break;
+
                 }
             }
             // End GameState Logoc
@@ -357,15 +299,14 @@ public class GameState extends State {
             //banner.update();
             pauseButton.update();
             menuButton.update();
-            tilestacks.update();
+            tileStacks.update();
             tileBoard.update();
-            timer.update();
-            chooseDificultyDialogue.update();
-            playAgainDialogue.update();
 
-            for (int i = 0; i < tiles.length; i++) {
-                tiles[i].update();
+            for (Tile tile : tiles) {
+                tile.update();
             }
+
+            tileBoard.update();
 
             //transition delay for exiting to menu
             if (transitionTimer > 0) {
@@ -377,36 +318,30 @@ public class GameState extends State {
                 timedTransition = false;
                 transitionTriggered = true;
             }
-            
         }
     }
 
     public void initializeVisualComponents() {
-        puzzle = puzzleManager.getCurrentPuzzle();
-        tiles = new Tile[81];
         tileBoard = new TileBoard(new Dimension((int) (0.72 * height), (int) (0.72 * height)), new Point((int) (0.4 * height), (int) (0.4 * height)));
-        tilestacks = new TileStacks(new Dimension((int) (width * 0.6), (int) (height * 0.2)), new Point((int) (width * 0.3), (int) (height * 0.85)));
-        timer = new Clock(new Dimension((int) (width * 0.3), (int) (width * 0.05)), new Point((int) (0.8 * width), (int) (0.2 * height)), 0);
+        tileStacks = new TileStacks(new Dimension((int) (width * 0.6), (int) (height * 0.2)), new Point((int) (width * 0.3), (int) (height * 0.85)));
 
         //creating tiles
         for (int i = 0; i < 81; i++) {
             if (puzzle.maskedElementAtIndex(i) != 0) {
-                tiles[i] = new Tile(new Dimension((int) (height * 0.075), (int) (height * 0.075)),
+                tiles[i] = new Tile(new Dimension((int) (height * 0.08), (int) (height * 0.08)),
                         tileBoard.anchorAtIndex(i),
-                        puzzle.elementAtIndex(i));
-                tiles[i].setIsBoardTile(true);
+                        puzzle.maskedElementAtIndex(i));
             } else {
-                tiles[i] = new Tile(new Dimension((int) (height * 0.075), (int) (height * 0.075)),
-                        tilestacks.anchorAtIndex(puzzle.elementAtIndex(i) - 1),
+                tiles[i] = new Tile(new Dimension((int) (height * 0.08), (int) (height * 0.08)),
+                        tileStacks.anchorAtIndex(puzzle.elementAtIndex(i) - 1),
                         puzzle.elementAtIndex(i));
-                tilestacks.pushTile(tiles[i]);
+                tileStacks.pushTile(tiles[i]);
                 addMouseListener(tiles[i]);
                 addMouseMotionListener(tiles[i]);
             }
         }
-        tilestacks.lockTiles();
-        //tilestacks.unlockTiles();
-        tileBoard.hideBoard(true);
+        tileStacks.lockTiles();
+        tileStacks.unlockTiles();
     }
 
     public void sleep(int numOfFrames) {

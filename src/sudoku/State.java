@@ -64,6 +64,8 @@ public class State extends JPanel{  // used to paint on it, it will cover the JF
     protected int screenMessageCounter = 0;
     protected int screenMessageLength = 0;
     
+    protected SoundManager sounds;
+    
     public State() {
         super();    
         repaint();
@@ -117,6 +119,8 @@ public class State extends JPanel{  // used to paint on it, it will cover the JF
         URL url = getClass().getResource(imgPath);
         background = tk.getImage(url);    
     }
+    
+    public void setSoundManager(SoundManager sounds){this.sounds = sounds;}
     
     public void writeToScreen(String message, int counter){   
         screenMessageLength = (int)bufferedGraphics.getFontMetrics().getStringBounds(message, bufferedGraphics).getWidth();

@@ -28,7 +28,9 @@
 package sudoku;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Point;
+
 
 /**
  * 
@@ -36,6 +38,7 @@ import java.awt.Point;
  */
 public class TileBoard extends AnchorManager{
     
+    private boolean hideBoard = false; // used for Pausing
     private boolean hasMove = false;
     private Move move = null;
     
@@ -52,6 +55,7 @@ public class TileBoard extends AnchorManager{
         }
         
         addImage("resources/SudokuGrid.png");
+        addImage("resources/SudokuGridHidden.png");
     }
     
 
@@ -100,6 +104,24 @@ public class TileBoard extends AnchorManager{
     public void acceptMove(Move move, Tile tile){
         tile.setHome(anchorAtIndex(move.getIndex()));
         tile.setIsDraggable(false);    
+    }
+    
+    
+    public void hideBoard(boolean hideBoard){this.hideBoard = hideBoard;}
+    
+    public boolean isBoardHidden(){return hideBoard;}
+    
+    public void paint(Graphics2D g){
+        super.paint(g);
+        if(hideBoard){
+            g.drawImage(images.get(1),
+                    (int)(x-w/2),
+                    (int)(y-h/2),
+                    (int)(w),
+                    (int)(h),
+                    null);
+        }
+        
     }
     
 

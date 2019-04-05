@@ -69,8 +69,13 @@ public class MenuState extends State{
     public void update(){
         super.update();
         
+        if(animationCounter == 10){
+            sounds.changeBackgroundSound("resources/sounds/oceanwaves.wav");
+        }
+        
         if(playButton.hasClick()){
             playButton.unClick();
+            animationCounter = 0;
             transitionTimer = 50;
             timedTransition = true;
             transitionToState = StateTransition.GAME;
@@ -78,12 +83,13 @@ public class MenuState extends State{
         }
         else if (optionsButton.hasClick()){
             optionsButton.unClick();
+            animationCounter = 0;
             transitionTimer = 50;
             timedTransition = true;
             transitionToState = StateTransition.OPTIONS;
         }
         else if (quitButton.hasClick()){
-            quitButton.unClick();
+            quitButton.unClick();            
             transitionTimer = 50;
             timedTransition = true;
             transitionToState = StateTransition.CREDITS;

@@ -43,6 +43,7 @@ public class Tile extends ImageEntity implements MouseMotionListener{
     private int value;
     private boolean isDraggable;
     private boolean isDragging;
+    private boolean isBoardTile = false;
     
     private Point home;
     
@@ -52,7 +53,10 @@ public class Tile extends ImageEntity implements MouseMotionListener{
     private ArrayList<String> imagePaths = new ArrayList<String>(){{
         add("resources/TileOne.png");add("resources/TileTwo.png");add("resources/TileThree.png");
         add("resources/TileFour.png");add("resources/TileFive.png");add("resources/TileSix.png");
-        add("resources/TileSeven.png");add("resources/TileEight.png");add("resources/TileNine.png");       
+        add("resources/TileSeven.png");add("resources/TileEight.png");add("resources/TileNine.png");     
+        add("resources/TileOneWhite.png");add("resources/TileTwoWhite.png");add("resources/TileThreeWhite.png");
+        add("resources/TileFourWhite.png");add("resources/TileFiveWhite.png");add("resources/TileSixWhite.png");
+        add("resources/TileSevenWhite.png");add("resources/TileEightWhite.png");add("resources/TileNineWhite.png");     
     }};
     
     
@@ -66,7 +70,9 @@ public class Tile extends ImageEntity implements MouseMotionListener{
         isDragging = false;
         //showBoundingBox();
         
-        addImage(imagePaths.get(value - 1));
+        addImage(imagePaths.get(value - 1)); // Red Tile
+        addImage(imagePaths.get(value - 1 + 9)); // White Tile
+        
         
     }   
 
@@ -110,6 +116,8 @@ public class Tile extends ImageEntity implements MouseMotionListener{
         this.dropped = dropped;
     }
     
+    public void setIsBoardTile(boolean isBoardTile){this.isBoardTile = isBoardTile;}
+    
     public void snapHome(){
         
         slide(home, 25);
@@ -118,6 +126,14 @@ public class Tile extends ImageEntity implements MouseMotionListener{
     @Override
     public void paint(Graphics2D g){
         super.paint(g);
+        if(isBoardTile){
+            g.drawImage(images.get(1),
+                    (int)(x-w/2),
+                    (int)(y-h/2),
+                    (int)(w),
+                    (int)(h),
+                    null);
+        }
     }
     
     @Override
@@ -159,6 +175,7 @@ System.out.println("Mouse Dragged");
     }
 
     @Override
+    @SuppressWarnings("empty-statement")
     public void mouseMoved(MouseEvent e) {
         ;
     }

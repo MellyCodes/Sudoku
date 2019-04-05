@@ -45,6 +45,10 @@ class SplashState extends State{
     public void update(){
         super.update();
         
+        if(animationCounter == 10){
+            sounds.playSound("background", 0);
+        }
+        
         if(animationCounter >= 250){
             transitionToState = StateTransition.MENU;
             transitionTriggered = true;            

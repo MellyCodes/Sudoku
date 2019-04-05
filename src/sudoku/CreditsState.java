@@ -50,9 +50,6 @@ class CreditsState extends State{
         credits.add("NBCC Moncton 2019");
         credits.add("Special Thanks to Jeffery Ottar");
         credits.add("For the name idea");
-        
-        credits.add("Testing Text for QA");
-        credits.add("Melanie Roy-Plommer for QA Testing");
     }
     
     @Override

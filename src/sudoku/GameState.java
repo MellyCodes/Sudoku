@@ -311,7 +311,7 @@ public class GameState extends State {
                             playAgainDialogue.setEnabled(true);
                             playAgainDialogue.getAnswer();
                             puzzleManager.markPuzzleComplete();
-                            puzzleManager.loadNextPuzzle();
+                            //puzzleManager.loadNextPuzzle();
                         } // else already in state
                         if (playAgainDialogue.getHasAnswer()) {
 

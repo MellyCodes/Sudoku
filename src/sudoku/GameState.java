@@ -190,7 +190,7 @@ public class GameState extends State {
                         if (enteringState) {
                             enteringState = false;
                             // Entering state (setup)
-                            writeToScreen("tilesunclicked", 100);
+                            //writeToScreen("tilesunclicked", 100);
                             tilestacks.lockTiles();
                             tilestacks.unlockTiles();
 
@@ -213,7 +213,7 @@ public class GameState extends State {
                         if (enteringState) {
                             enteringState = false;
                             // Entering state (setup)
-                            writeToScreen("dragging", 100);
+                            //writeToScreen("dragging", 100);
 
                         } // else already in state
                         // Check for tile dropped.
@@ -248,7 +248,7 @@ public class GameState extends State {
                             enteringState = false;
                             sounds.playSound("tilehome", 1);
                             // Entering state (setup)
-                            writeToScreen("miss", 100);
+                            //writeToScreen("miss", 100);
 
                         } // else already in state
                         if (tileInPlay.getHome().equals(tileInPlay.getPosition())) {
@@ -261,6 +261,7 @@ public class GameState extends State {
                     case BOARD_REJECTS:
                         if (enteringState) {
                             enteringState = false;
+                            sounds.playSound("tilehome", 1);
                             // Entering state (setup)
                             writeToScreen("Wrong Guess: 10s Penalty!", 100);
                             timer.timePenalty(10);

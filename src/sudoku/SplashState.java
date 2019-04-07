@@ -26,7 +26,9 @@
 */
 package sudoku;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 
 /**
  *
@@ -34,11 +36,18 @@ import java.awt.Graphics;
  */
 class SplashState extends State{
    
+    private final ImageEntity rainbow;
+    private final ImageEntity logo;
     
     public SplashState() {
         
         super();
-        addBackground("resources/splashBackground.jpg");
+        addBackground("resources/splashBackground.jpg");                
+        rainbow = new ImageEntity(new Dimension((int)(0.8*height), (int)(0.85*height)), new Point(width/2, (int)(height*0.45)), 0);
+        rainbow.addImage("resources/rainbow.png");
+        
+        logo = new ImageEntity(new Dimension((int)(0.85*height), (int)(0.85*height)), new Point(width/2, height/2), 0);
+        logo.addImage("resources/sudokuLogo.png");
     }
     
     @Override
@@ -53,11 +62,19 @@ class SplashState extends State{
             transitionToState = StateTransition.MENU;
             transitionTriggered = true;            
         }
+        
+        rainbow.setOrientation(rainbow.getOrientation()+0.3);
+        
+        rainbow.update();
+        logo.update();
     }    
     
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+                
+        rainbow.paint(bufferedGraphics);
+        logo.paint(bufferedGraphics);
         
         g.drawImage(imageBuffer, 0, 0, width, height, null);
     }    

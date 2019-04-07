@@ -82,7 +82,7 @@ public class Button extends ImageEntity{
             case MENU:
                 imageBaseIndex = 0;
                 yScale = 0.25;
-                fontScale = 0.25;
+                fontScale = 0.40;
                 break;
             case KEY:
                 imageBaseIndex = 3;
@@ -149,7 +149,7 @@ public class Button extends ImageEntity{
             int stringHeight = (int)g.getFontMetrics().getStringBounds(buttonText, g).getHeight();
             
             // draw text
-            g.drawString(buttonText, (int)(x-0.5*stringLength), (int) ((int) (y+0.4*stringHeight)));
+            g.drawString(buttonText, (int)(x-0.5*stringLength), (int) ((int) (y+0.05*stringHeight)));
         }
         
         if(showingBoundingBox){

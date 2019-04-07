@@ -41,7 +41,6 @@ public class StateController extends JFrame implements Runnable{
     
     private Thread gameLoop;   
     private SplashState splash;
-    private OptionsState options;
     private CreditsState credits;
     private GameState game;
     private MenuState menu;
@@ -61,6 +60,7 @@ public class StateController extends JFrame implements Runnable{
         sounds.addSound("tilehome", "resources/sounds/tileHome.wav");
         sounds.addSound("tileaccepted", "resources/sounds/tileAccepted.wav");
         
+        
         // Instantiate SplashState   
         splash = new SplashState();
         splash.setSize(new Dimension(WIDTH, HEIGHT));
@@ -70,11 +70,6 @@ public class StateController extends JFrame implements Runnable{
         menu = new MenuState();
         menu.setSize(new Dimension(WIDTH, HEIGHT));    
         menu.setSoundManager(sounds);
-        
-        // Instantiate OptionsState
-        options = new OptionsState();
-        options.setSize(new Dimension(WIDTH, HEIGHT));
-        options.setSoundManager(sounds);
         
         // Instaniate GameState     
         game = new GameState();
@@ -127,9 +122,6 @@ public class StateController extends JFrame implements Runnable{
                     break;
                 case MENU:
                     currentState = menu;
-                    break;
-                case OPTIONS:
-                    currentState = options;
                     break;
                 case GAME:
                     currentState = game;

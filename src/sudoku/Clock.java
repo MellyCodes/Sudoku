@@ -1,8 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/**
+* @file Clock.java
+* @author Melanie Roy-Plommer
+* @version 1.0
+*
+* @section DESCRIPTION
+* <  >
+*
+* @section LICENSE
+* Copyright 2018 - 2019
+* Permission to use, copy, modify, and/or distribute this software for
+* any purpose with or without fee is hereby granted, provided that the
+* above copyright notice and this permission notice appear in all copies.
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+* ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+* WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+* ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*
+* @section Academic Integrity
+* I certify that this work is solely my own and complies with
+* NBCC Academic Integrity Policy (policy 1111)
+*/
 package sudoku;
 
 import java.util.ArrayList;
@@ -21,17 +42,17 @@ public class Clock extends ImageEntity {
 
     private ArrayList<String> imagePaths = new ArrayList<String>() {
         {
-            add("resources/clock/zero.png");
-            add("resources/clock/one.png");
-            add("resources/clock/two.png");
-            add("resources/clock/three.png");
-            add("resources/clock/four.png");
-            add("resources/clock/five.png");
-            add("resources/clock/six.png");
-            add("resources/clock/seven.png");
-            add("resources/clock/eight.png");
-            add("resources/clock/nine.png");
-            add("resources/clock/colon.png");
+            add("resources/clock/zeroWhite.png");
+            add("resources/clock/oneWhite.png");
+            add("resources/clock/twoWhite.png");
+            add("resources/clock/threeWhite.png");
+            add("resources/clock/fourWhite.png");
+            add("resources/clock/fiveWhite.png");
+            add("resources/clock/sixWhite.png");
+            add("resources/clock/sevenWhite.png");
+            add("resources/clock/eightWhite.png");
+            add("resources/clock/nineWhite.png");
+            add("resources/clock/colonWhite.png");
         }
     };
 
@@ -52,9 +73,9 @@ public class Clock extends ImageEntity {
         addImage("resources/blank.png");
 
         // load number images from files
-        for (String path : imagePaths) {
+        imagePaths.forEach((path) -> {
             addImage(path);
-        }
+        });
 
         // zero out the time digits
         for (int i = 0; i < timeDigits.length; i++) {
@@ -115,9 +136,10 @@ public class Clock extends ImageEntity {
         timeImages[imageIndex] = images.get(digit + 1);
     }
 
+    @Override
     public void paint(Graphics2D g) {
         super.paint(g);
-        g.setColor(new Color(255, 255, 255));
+        g.setColor(new Color(0, 0, 0, 100));
         g.fillRect((int) (x - 0.5 * w), (int) (y - 0.5 * h), (int) w, (int) h);
         g.setColor(new Color(0, 0, 0));
         g.drawRect((int) (x - 0.5 * w), (int) (y - 0.5 * h), (int) w, (int) h);
@@ -145,6 +167,8 @@ public class Clock extends ImageEntity {
         return running;
     }
 
+    @Override
+    @SuppressWarnings("empty-statement")
     public void reset() {
         ;
     }

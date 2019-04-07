@@ -36,7 +36,6 @@ import java.awt.Point;
  */
 public class MenuState extends State{
     private final Button playButton;
-    private final Button optionsButton;
     private final Button quitButton;
     
     private final ImageEntity banner;
@@ -55,10 +54,6 @@ public class MenuState extends State{
         playButton = new Button((int)(0.33*width), new Point((int)(-0.3*width), (int)(0.4*height)), 0, "Play Game", Button.ButtonType.MENU);
         playButton.slide(new Point((int)(0.5*width), (int)(0.4*height)), 10);
         addMouseListener(playButton);
-        
-        optionsButton = new Button((int)(0.33*width), new Point((int)(-0.5*width), (int)(0.6*height)), 0, "Options", Button.ButtonType.MENU);
-        optionsButton.slide(new Point((int)(0.5*width), (int)(0.6*height)), 20);
-        addMouseListener(optionsButton);
         
         quitButton = new Button((int)(0.33*width), new Point((int)(-0.7*width), (int)(0.8*height)), 0, "Quit", Button.ButtonType.MENU);
         quitButton.slide(new Point((int)(0.5*width), (int)(0.8*height)), 30);
@@ -81,13 +76,6 @@ public class MenuState extends State{
             transitionToState = StateTransition.GAME;
             
         }
-        else if (optionsButton.hasClick()){
-            optionsButton.unClick();
-            animationCounter = 0;
-            transitionTimer = 50;
-            timedTransition = true;
-            transitionToState = StateTransition.OPTIONS;
-        }
         else if (quitButton.hasClick()){
             quitButton.unClick();            
             transitionTimer = 50;
@@ -104,7 +92,6 @@ public class MenuState extends State{
             transitionTriggered = true;
         }
         playButton.update();
-        optionsButton.update();
         quitButton.update();
         banner.update();        
     }          
@@ -112,8 +99,7 @@ public class MenuState extends State{
     @Override
     public void paintComponent(Graphics g){        
         super.paintComponent(g);
-        playButton.paint(bufferedGraphics);        
-        optionsButton.paint(bufferedGraphics);
+        playButton.paint(bufferedGraphics);    
         quitButton.paint(bufferedGraphics);
         banner.paint(bufferedGraphics);
         

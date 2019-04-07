@@ -1,29 +1,27 @@
 /**
-* @file SoundManager.java
-* @author Melanie Roy-Plommer
-* @version 1.0
-*
-* @section DESCRIPTION
-* <  >
-*
-* @section LICENSE
-* Copyright 2018 - 2019
-* Permission to use, copy, modify, and/or distribute this software for
-* any purpose with or without fee is hereby granted, provided that the
-* above copyright notice and this permission notice appear in all copies.
-*
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-* ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-* WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-* ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-*
-* @section Academic Integrity
-* I certify that this work is solely my own and complies with
-* NBCC Academic Integrity Policy (policy 1111)
-*/
+ * @file SoundManager.java
+ * @author Melanie Roy-Plommer
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * < >
+ *
+ * @section LICENSE Copyright 2018 - 2019 Permission to use, copy, modify,
+ * and/or distribute this software for any purpose with or without fee is hereby
+ * granted, provided that the above copyright notice and this permission notice
+ * appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ *
+ * @section Academic Integrity I certify that this work is solely my own and
+ * complies with NBCC Academic Integrity Policy (policy 1111)
+ */
 package sudoku;
 
 import javax.sound.sampled.AudioSystem;
@@ -39,9 +37,8 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * @section Academic Integrity I certify that this work is solely my own and
- * complies with NBCC Academic Integrity Policy (policy 1111)
- * @author Melanie Roy-Plommer
+ *
+ * @author melan
  */
 public class SoundManager {
 
@@ -64,10 +61,15 @@ public class SoundManager {
             effectsClip1 = (Clip) mixer.getLine(lineInfo);
             effectsClip2 = (Clip) mixer.getLine(lineInfo);
         } catch (LineUnavailableException lue) {
-            lue.printStackTrace();
+            lue.printStackTrace(System.out);
         }
     }
 
+    /**
+     *
+     * @param soundID
+     * @param soundPath
+     */
     public void addSound(String soundID, String soundPath) {
         try {
             // Get AudioInputStream from soundPath
@@ -76,14 +78,16 @@ public class SoundManager {
             audioStream.mark(1000000000);
             audioStreams.put(soundID, audioStream);
             //System.out.println(audioStreams.size());
-        } catch (UnsupportedAudioFileException uafe) {
-            uafe.printStackTrace();
-        } catch (IOException IOE) {
-            IOE.printStackTrace();
+        } catch (UnsupportedAudioFileException | IOException uafe) {
+            uafe.printStackTrace(System.out);
         }
     }
 
-    // 
+    /**
+     *
+     * @param soundID
+     * @param timesToLoop
+     */
     public void playSound(String soundID, int timesToLoop) {
         try {
             if ("background".equals(soundID)) {
@@ -104,18 +108,22 @@ public class SoundManager {
                     effectsClip1.start();
                 }
             }
-        } catch (LineUnavailableException lue) {
-            lue.printStackTrace();
-        } catch (IOException IOE) {
-            IOE.printStackTrace();
+        } catch (LineUnavailableException | IOException lue) {
+            lue.printStackTrace(System.out);
         }
     }
 
+    /**
+     *
+     */
     public void stopBackgroundSound() {
         backgroundClip.stop();
         backgroundClip.setFramePosition(0);
     }
 
+    /**
+     *
+     */
     public void stopSoundEffects() {
         effectsClip1.stop();
         effectsClip1.setFramePosition(0);
@@ -123,19 +131,32 @@ public class SoundManager {
         effectsClip2.setFramePosition(0);
     }
 
+    /**
+     *
+     */
     public void pauseBackgroundSound() {
         backgroundClip.stop();
     }
 
+    /**
+     *
+     */
     public void stopAll() {
         stopBackgroundSound();
         stopSoundEffects();
     }
 
+    /**
+     *
+     */
     public void unpauseBackgroundSound() {
         backgroundClip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
+    /**
+     *
+     * @param soundPath
+     */
     public void changeBackgroundSound(String soundPath) {
         try {
             backgroundClip.stop();
@@ -144,7 +165,7 @@ public class SoundManager {
             audioStreams.get("background").reset();
             playSound("background", 1);
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            ioe.printStackTrace(System.out);
         }
 
     }

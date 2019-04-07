@@ -54,6 +54,42 @@ public class GameState extends State {
         puzzle = puzzleManager.getCurrentPuzzle();
         initializeVisualComponents();
 
+        setUpDifficultyDialog();
+
+        setUpPlayAgainDialog();
+
+        setUpGameButtons();
+
+    }
+
+    /**
+     *
+     */
+    private void setUpGameButtons() {
+        pauseButton = new Button((int) (0.25 * width), new Point((int) (0.9 * width), (int) (0.75 * height)), 0, "Pause", Button.ButtonType.MENU);
+        addMouseListener(pauseButton);
+
+        menuButton = new Button((int) (0.25 * width), new Point((int) (0.9 * width), (int) (0.85 * height)), 0, "Menu", Button.ButtonType.MENU);
+        addMouseListener(menuButton);
+    }
+
+    /**
+     *
+     */
+    private void setUpPlayAgainDialog() {
+        playAgainDialogue = new Dialog1Q(new Dimension((int) (width * 0.6), (int) (height * 0.6)), new Point((int) (width * 0.5), (int) (height * 0.5)),
+                "PLay Again?:");
+        playAgainDialogue.addButton("Yes", "yes");
+        playAgainDialogue.addButton("No", "no");
+        addMouseListener(playAgainDialogue);
+        playAgainDialogue.setVisible(false);
+        playAgainDialogue.setEnabled(false);
+    }
+
+    /**
+     *
+     */
+    private void setUpDifficultyDialog() {
         // set up dialogues
         chooseDificultyDialogue = new Dialog1Q(new Dimension((int) (width * 0.6), (int) (height * 0.6)), new Point((int) (width * 0.5), (int) (height * 0.5)),
                 "Choose a dificulty:");
@@ -63,23 +99,12 @@ public class GameState extends State {
         addMouseListener(chooseDificultyDialogue);
         chooseDificultyDialogue.setVisible(false);
         chooseDificultyDialogue.setEnabled(false);
-
-        playAgainDialogue = new Dialog1Q(new Dimension((int) (width * 0.6), (int) (height * 0.6)), new Point((int) (width * 0.5), (int) (height * 0.5)),
-                "PLay Again?:");
-        playAgainDialogue.addButton("Yes", "yes");
-        playAgainDialogue.addButton("No", "no");
-        addMouseListener(playAgainDialogue);
-        playAgainDialogue.setVisible(false);
-        playAgainDialogue.setEnabled(false);
-
-        pauseButton = new Button((int) (0.25 * width), new Point((int) (0.9 * width), (int) (0.75 * height)), 0, "Pause", Button.ButtonType.MENU);
-        addMouseListener(pauseButton);
-
-        menuButton = new Button((int) (0.25 * width), new Point((int) (0.9 * width), (int) (0.85 * height)), 0, "Menu", Button.ButtonType.MENU);
-        addMouseListener(menuButton);
-
     }
 
+    /**
+     *
+     * @param g
+     */
     @Override
     public void paintComponent(Graphics g) {
 
@@ -114,6 +139,9 @@ public class GameState extends State {
         g.drawImage(imageBuffer, 0, 0, width, height, null);
     }
 
+    /**
+     *
+     */
     @Override
     public void update() {
         super.update();
@@ -378,10 +406,13 @@ public class GameState extends State {
                 timedTransition = false;
                 transitionTriggered = true;
             }
-            
+
         }
     }
 
+    /**
+     *
+     */
     public void initializeVisualComponents() {
         puzzle = puzzleManager.getCurrentPuzzle();
         tiles = new Tile[81];
@@ -406,10 +437,13 @@ public class GameState extends State {
             }
         }
         tilestacks.lockTiles();
-        //tilestacks.unlockTiles();
         tileBoard.hideBoard(true);
     }
 
+    /**
+     *
+     * @param numOfFrames
+     */
     public void sleep(int numOfFrames) {
         gameSleepCounter = numOfFrames;
     }

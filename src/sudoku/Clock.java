@@ -1,29 +1,27 @@
 /**
-* @file Clock.java
-* @author Melanie Roy-Plommer
-* @version 1.0
-*
-* @section DESCRIPTION
-* <  >
-*
-* @section LICENSE
-* Copyright 2018 - 2019
-* Permission to use, copy, modify, and/or distribute this software for
-* any purpose with or without fee is hereby granted, provided that the
-* above copyright notice and this permission notice appear in all copies.
-*
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-* ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-* WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-* ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-*
-* @section Academic Integrity
-* I certify that this work is solely my own and complies with
-* NBCC Academic Integrity Policy (policy 1111)
-*/
+ * @file Clock.java
+ * @author Melanie Roy-Plommer
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * < >
+ *
+ * @section LICENSE Copyright 2018 - 2019 Permission to use, copy, modify,
+ * and/or distribute this software for any purpose with or without fee is hereby
+ * granted, provided that the above copyright notice and this permission notice
+ * appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ *
+ * @section Academic Integrity I certify that this work is solely my own and
+ * complies with NBCC Academic Integrity Policy (policy 1111)
+ */
 package sudoku;
 
 import java.util.ArrayList;
@@ -100,6 +98,9 @@ public class Clock extends ImageEntity {
         }
     }
 
+    /**
+     *
+     */
     private void updateTimeDigits() {
         int trimmedElapsedTime = elapsedTime;
         // 10s of hours
@@ -126,12 +127,20 @@ public class Clock extends ImageEntity {
         timeDigits[5] = trimmedElapsedTime;
     }
 
+    /**
+     *
+     */
     private void updateTimeImages() {
         for (int i = 0; i < timeDigits.length; i++) {
             updateTimeImage(i, timeDigits[i]);
         }
     }
 
+    /**
+     *
+     * @param imageIndex
+     * @param digit
+     */
     private void updateTimeImage(int imageIndex, int digit) {
         timeImages[imageIndex] = images.get(digit + 1);
     }
@@ -153,26 +162,43 @@ public class Clock extends ImageEntity {
         g.drawImage(timeImages[5], (int) (x - (int) (w / 2) + 160), (int) (y - 20), 40, 40, null); // s2
     }
 
+    /**
+     *
+     */
     public void start() {
         running = true;
         currentTimeInSeconds = (int) (System.currentTimeMillis() / 1000);
         previousTimeInSeconds = currentTimeInSeconds;
     }
 
+    /**
+     *
+     */
     public void stop() {
         running = false;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isRunning() {
         return running;
     }
 
+    /**
+     *
+     */
     @Override
     @SuppressWarnings("empty-statement")
     public void reset() {
         ;
     }
 
+    /**
+     *
+     * @param seconds
+     */
     public void timePenalty(int seconds) {
         elapsedTime += seconds;
     }

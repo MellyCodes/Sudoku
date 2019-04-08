@@ -35,6 +35,8 @@ import java.net.URL;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
+import javax.sound.sampled.BooleanControl;
+import javax.sound.sampled.FloatControl;
 
 /**
  *
@@ -46,6 +48,9 @@ public class SoundManager {
     private Clip backgroundClip;
     private Clip effectsClip1;
     private Clip effectsClip2;
+    
+    
+    
 
     private Map<String, AudioInputStream> audioStreams = new HashMap<>();
 
@@ -58,8 +63,18 @@ public class SoundManager {
         DataLine.Info lineInfo = new DataLine.Info(Clip.class, null);
         try {
             backgroundClip = (Clip) mixer.getLine(lineInfo);
+            
             effectsClip1 = (Clip) mixer.getLine(lineInfo);
-            effectsClip2 = (Clip) mixer.getLine(lineInfo);
+            effectsClip2 = (Clip) mixer.getLine(lineInfo);  
+            
+//            FloatControl gainControl = (FloatControl) backgroundClip.getControl(FloatControl.Type.MASTER_GAIN);
+//            double gain = .5D; // number between 0 and 1 (loudest)
+//            float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
+//            gainControl.setValue(dB);
+//            BooleanControl muteControl = (BooleanControl) backgroundClip.getControl(BooleanControl.Type.MUTE);
+//            muteControl.setValue(true);
+//            muteControl.setValue(false);
+
         } catch (LineUnavailableException lue) {
             lue.printStackTrace(System.out);
         }

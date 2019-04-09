@@ -96,7 +96,7 @@ class CreditsState extends State {
     }
 
     /**
-     *
+     * 
      */
     private void writeCredits() {
         credits.add("CREDITS");
@@ -104,16 +104,15 @@ class CreditsState extends State {
         credits.add("for: Comprehensive Development Project");
         credits.add("Gaming Experience Development");
         credits.add("NBCC Moncton 2019");
+        credits.add("Image Credits");
         credits.add("All images from Pixabay.com");
         credits.add("Music Credits");
         credits.add("'Man Down (game)' and 'Dewdrop Fantasy (splash)' by Kevin MacLeod (incompetech.com)");
         credits.add("Leslie-ish remix of soundsrule1111's Freesound#181464 (credits) (freesound.org)");
+        credits.add("Sounds Credits");
+        credits.add("https://www.pacdv.com/sounds/interface_sounds.html");
         credits.add("Licensed under Creative Commons: By Attribution 3.0 License");
         credits.add("http://creativecommons.org/licenses/by/3.0/");
-        credits.add("Sounds Credits");
-        credits.add("");
-        credits.add("");
-        credits.add("");
         credits.add("Special Thanks to Jeffery Ottar");
         credits.add("For the name idea");
     }

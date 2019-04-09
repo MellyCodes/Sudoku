@@ -66,6 +66,8 @@ public class GameState extends State {
     private int transitionTimer = 0; // transition out to main menu
     private boolean timedTransition = false; // transition out to main menu
 
+    private String puzzleDifficulty;
+
     public GameState() {
         super();
 
@@ -208,7 +210,7 @@ public class GameState extends State {
 
                         // upon state transition
                         if (chooseDificultyDialogue.getHasAnswer()) {
-                            chooseDificultyDialogue.getAnswer();
+                            puzzleDifficulty = chooseDificultyDialogue.getAnswer();
                             chooseDificultyDialogue.setVisible(false);
                             chooseDificultyDialogue.setEnabled(false);
 
@@ -222,6 +224,15 @@ public class GameState extends State {
                             enteringState = false;
                             // Entering state (setup)
                             puzzle = puzzleManager.getCurrentPuzzle();
+
+                            if ("hard".equals(puzzleDifficulty)) {
+                                puzzle.setDifficulty(3);
+                            } else if ("medium".equals(puzzleDifficulty)) {
+                                puzzle.setDifficulty(2);
+                            } else {
+                                puzzle.setDifficulty(1);
+                            }
+
                             initializeVisualComponents();
                             tilestacks.unlockTiles();
                             tileBoard.hideBoard(false);
@@ -438,7 +449,7 @@ public class GameState extends State {
         tiles = new Tile[81];
         tileBoard = new TileBoard(new Dimension((int) (0.72 * height), (int) (0.72 * height)), new Point((int) (0.4 * height), (int) (0.4 * height)));
         tilestacks = new TileStacks(new Dimension((int) (width * 0.6), (int) (height * 0.2)), new Point((int) (width * 0.3), (int) (height * 0.85)));
-        timer = new Clock(new Dimension((int) (width * 0.3), (int) (width * 0.05)), new Point((int) (0.8 * width), (int) (0.2 * height)), 0);
+        timer = new Clock(new Dimension((int) (width * 0.3), (int) (width * 0.1)), new Point((int) (0.8 * width), (int) (0.2 * height)), 0);
 
         //creating tiles
         for (int i = 0; i < 81; i++) {

@@ -145,6 +145,10 @@ public class Clock extends ImageEntity {
         timeImages[imageIndex] = images.get(digit + 1);
     }
 
+    /**
+     * 
+     * @param g 
+     */
     @Override
     public void paint(Graphics2D g) {
         super.paint(g);
@@ -152,14 +156,14 @@ public class Clock extends ImageEntity {
         g.fillRect((int) (x - 0.5 * w), (int) (y - 0.5 * h), (int) w, (int) h);
         g.setColor(new Color(0, 0, 0));
         g.drawRect((int) (x - 0.5 * w), (int) (y - 0.5 * h), (int) w, (int) h);
-        g.drawImage(timeImages[0], (int) (x - (int) (w / 2) + 20), (int) (y - 20), 40, 40, null); // h1
-        g.drawImage(timeImages[1], (int) (x - (int) (w / 2) + 40), (int) (y - 20), 40, 40, null); // h2
-        g.drawImage(images.get(11), (int) (x - (int) (w / 2) + 70), (int) (y - 20), 20, 40, null); // :
-        g.drawImage(timeImages[2], (int) (x - (int) (w / 2) + 80), (int) (y - 20), 40, 40, null); // m1
-        g.drawImage(timeImages[3], (int) (x - (int) (w / 2) + 100), (int) (y - 20), 40, 40, null); // m2
-        g.drawImage(images.get(11), (int) (x - (int) (w / 2) + 130), (int) (y - 20), 20, 40, null); // :
-        g.drawImage(timeImages[4], (int) (x - (int) (w / 2) + 140), (int) (y - 20), 40, 40, null); // s1
-        g.drawImage(timeImages[5], (int) (x - (int) (w / 2) + 160), (int) (y - 20), 40, 40, null); // s2
+        g.drawImage(timeImages[0], (int) (x - (int) (w / 2) + 25), (int) (y - 25), 50, 50, null); // h1
+        g.drawImage(timeImages[1], (int) (x - (int) (w / 2) + 45), (int) (y - 25), 50, 50, null); // h2
+        g.drawImage(images.get(11), (int) (x - (int) (w / 2) + 75), (int) (y - 25), 30, 50, null); // :
+        g.drawImage(timeImages[2], (int) (x - (int) (w / 2) + 85), (int) (y - 25), 50, 50, null); // m1
+        g.drawImage(timeImages[3], (int) (x - (int) (w / 2) + 105), (int) (y - 25), 50, 50, null); // m2
+        g.drawImage(images.get(11), (int) (x - (int) (w / 2) + 135), (int) (y - 25), 30, 50, null); // :
+        g.drawImage(timeImages[4], (int) (x - (int) (w / 2) + 145), (int) (y - 25), 50, 50, null); // s1
+        g.drawImage(timeImages[5], (int) (x - (int) (w / 2) + 165), (int) (y - 25), 50, 50, null); // s2
     }
 
     /**

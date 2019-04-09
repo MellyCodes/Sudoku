@@ -26,12 +26,14 @@ package sudoku;
 
 public class PuzzleGenerator extends Thread {
 
-    private PuzzleManager puzzleManager;
+    private PuzzleManager puzzleManager; // Used to add generated puzzles to unsolvedPuzzles queue
+    private int numberOfSolutions = 0;	// Used by backtrack to test for uniqueness. Visible at all levels of recursion
 
-    //private String puzzleString = "5 3 9 8 2 4 6 7 1 6 1 2 3 7 9 5 4 8 4 7 8 1 5 6 9 2 3 7 4 1 2 6 5 3 8 9 3 9 6 4 8 1 7 5 2 8 2 5 7 9 3 1 6 4 2 5 3 6 1 8 4 9 7 9 8 4 5 3 7 2 1 6 1 6 7 9 4 2 8 3 5";
-    private String maskString = "0 0 1 1 1 0 1 1 1 0 1 0 1 1 1 1 1 1 1 0 0 0 0 1 1 1 1 1 1 0 0 1 1 1 1 0 1 1 0 1 0 1 0 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 0 0 0 0 1 1 1 1 1 1 1 0 1 0 1 1 1 0 1 1 1 0 0";
+    // Bounding one aspect of the dificulty of the generated puzzles
+    private int lowerBoundHints = 35;  // Theoretical lower bound is 17 hints
+    private int upperBoundHints = 40;
 
-    // Created by the PuzzleManager and the PuzzleManager hands a reference to itself to the PuzzleGenerator
+    // Constructor
     public PuzzleGenerator(PuzzleManager puzzleManager) {
         this.puzzleManager = puzzleManager;
     }
@@ -39,18 +41,16 @@ public class PuzzleGenerator extends Thread {
     /**
      * 
      */
-    @Override
     public void run() {
 
         while (true) {
             try {
                 Thread.sleep((int) (1000));
             } catch (InterruptedException ie) {
-                ie.printStackTrace(System.out);
+                ie.printStackTrace();
             }
-            //System.out.println("size of puzzlemanager" + puzzleManager.unsolvedPuzzles.size());
+
             if (puzzleManager.unsolvedPuzzles.size() < 10) {
-                //System.out.println("Trying to generate puzzle");
                 Puzzle newPuzzle = generatePuzzle();
                 puzzleManager.unsolvedPuzzles.add(newPuzzle);
                 puzzleManager.savePuzzles(puzzleManager.unsolvedPuzzlesFile, puzzleManager.unsolvedPuzzles);
@@ -59,38 +59,172 @@ public class PuzzleGenerator extends Thread {
     }
 
     /**
-     * Creates a new legal Sudoku board.
-     * Mask is set to ensure unique solution
-     * @return
+     * 
+     * @return 
      */
     private Puzzle generatePuzzle() {
         Puzzle newPuzzle;
 
         int[] puzzleArray = new int[81];
-        // Setting all elements to 0
-        for (int i = 0; i < 81; i++) {
-            puzzleArray[i] = 0;
+        boolean[] maskArray = new boolean[81];
+        int hints = 81;
+
+        // Generate puzzles and masks until we get one at right dificulty
+        while (hints >= upperBoundHints || hints <= lowerBoundHints) {
+
+            // clear arrays
+            for (int i = 0; i < 81; i++) {
+                puzzleArray[i] = 0;
+                maskArray[i] = false;
+            }
+
+            solve(puzzleArray, 0); // Fills puzzleArray
+            maskArray = getUniqueMask(puzzleArray);
+
+            hints = countHints(maskArray); // is puzzle hard enough?	
+
         }
-        
-        // Array is filled in solve
-        solve(puzzleArray, 0);
 
-        newPuzzle = new Puzzle(puzzleArrayToString(puzzleArray), maskString);
-
+        newPuzzle = new Puzzle(puzzleArrayToString(puzzleArray), maskArrayToString(maskArray));
         return newPuzzle;
     }
 
+    // ---------------------- Getting Unique Mask ---------------------- //
+    
     /**
-     * Recursively fills the elements of the array to produce a legal Sudoku
-     * 
+     * Masks elements of the puzzle until just before puzzle stops having unique solution
+     * @param puzzleArray
+     * @return 
+     */
+    private boolean[] getUniqueMask(int[] puzzleArray) {
+        int[] disposablePuzzleArray = puzzleArray.clone(); // don't want to overwrite actual puzzle
+        boolean[] maskArray = new boolean[81];	// maskArray to be returned
+        for (int i = 0; i < 81; i++) {
+            maskArray[i] = false;
+        } // All false means no puzzle elements masked
+
+        while (true) {
+            // select random element for deletion
+            int maskingCandidate = getMaskingCandidate(maskArray);
+
+            // Store puzzle element in case it's deletion breaks uniqueness
+            int puzzleElementForMasking = disposablePuzzleArray[maskingCandidate];
+
+            // Delete element from puzzle
+            disposablePuzzleArray[maskingCandidate] = 0;
+            //for(int i : disposablePuzzleArray){ System.out.print(i); System.out.println(); }
+
+            if (hasUniqueSolution(disposablePuzzleArray)) {
+                // deleting this element does not break uniqueness
+                maskArray[maskingCandidate] = true; // mask this element
+
+            } else { // deletion did break uniqueness.
+                // undo deletion and stop.
+                disposablePuzzleArray[maskingCandidate] = puzzleElementForMasking;
+                break;
+            }
+
+        }
+
+        return maskArray;
+
+    }
+
+
+    /**
+     * Sets up entry conditions for recursive backtrack function
+     * calls recursive function to check how many solutions a puzzle/mask combo hasNextLine
+     * returns false if puzzle does not have unique solution
+     * @param puzzleArray
+     * @return 
+     */
+    private boolean hasUniqueSolution(int[] puzzleArray) {
+        this.numberOfSolutions = 0;
+        solveMultiple(puzzleArray, 0);
+        if (numberOfSolutions == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Recursive backtrack function searches for solutions to puzzle.
+     * stops looking when it finds 2 solutions. ie not a unique solution.
+     * updates numberOfSolutions instance variable used in hasUniqueSolution() above
      * @param puzzleArray
      * @param index
-     * @return true if it solves the puzzle
+     * @return 
+     */
+    private boolean solveMultiple(int[] puzzleArray, int index) {
+
+        // checking for no more empty cells.
+        // reached end of puzzle and no empties
+        if (index == 80 && puzzleArray[index] != 0) { // puzzle complete
+            this.numberOfSolutions++;
+            return false;
+        }
+
+        // Get index of next empty cell
+        while (puzzleArray[index] != 0) {
+            index++;	// find next empty cell
+            if (index > 80) { // no more empty cells
+                this.numberOfSolutions++;
+                return false; // solution found but backtrack and look for more
+            }
+        }
+        
+        // at this point we have found an empty cell
+        // index can be 80 here but only if 80 is empty cell
+        int[] candidates = candidates(); // numbers 1 - 9 in random order
+
+        for (int candidate : candidates) {
+
+            if (index == 80) {
+                if (isLegalMove(candidate, puzzleArray, index)) { // puzzle complete
+                    this.numberOfSolutions++;
+                    return false;
+                } else { // not legal so try next candidate -- no recursion on 80
+                    continue;
+                }
+            }
+
+            // if legal move but not potentially more empty cells then try to recursively
+            // try to solve puzzle using this candidate. 
+            if (isLegalMove(candidate, puzzleArray, index)) {
+                puzzleArray[index] = candidate; // try candidate
+
+                // recursive step. can rest of puzzle be solved by using this candidate
+                // in this empty cell.
+                if (solveMultiple(puzzleArray, index + 1)) { // puzzle solves
+                    return true;
+                } else { // puzzle does not solve with this candidate
+                    puzzleArray[index] = 0; // delete candidate from cell.
+
+                }
+                // If making the move resulted in a second solution
+                // run straight back up the recursion stack
+                if (this.numberOfSolutions > 1) {
+                    return false;
+                }
+            }
+            // try next candidate until none left
+        }
+        // No candidate allowed puzzle to be solved.
+        // need to back track
+        return false;
+    }
+
+    // ---------------- Getting Legal Completed Puzzle ----------------- //
+    /**
+     * returns true if it solves the puzzle
+     * @param puzzleArray
+     * @param index
+     * @return 
      */
     private boolean solve(int[] puzzleArray, int index) {
-        int[] candidates = candidates();  
+        int[] candidates = candidates();
 
-        // Iterating through candidated gives random number without replacement
         for (int candidate : candidates) {
 
             // test for puzzle succesfully completed
@@ -99,7 +233,7 @@ public class PuzzleGenerator extends Thread {
                 return true;
             }
 
-            // if legal move but not termnating then try to recursively
+            // if legal move but not terminating then try to recursively
             // solve puzzle using this candidate. 
             if (isLegalMove(candidate, puzzleArray, index)) {
                 puzzleArray[index] = candidate; // try candidate
@@ -115,39 +249,10 @@ public class PuzzleGenerator extends Thread {
         return false;
     }
 
-    /**
-     * Numbers 1 to 9 in random order
-     * @return
-     */
-    private int[] candidates() {
-        int[] candidates = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-        for (int i = 0; i < 20; i++) { // 20 shuffles
-            int index1 = (int) (Math.random() * 9);
-            int index2 = (int) (Math.random() * 9);
-            // Perform swap
-            int temp = candidates[index1];
-            candidates[index1] = candidates[index2];
-            candidates[index2] = temp;
-        }
-        return candidates;
-    }
-
-    /**
-     *
-     * @param puzzleArray
-     * @return
-     */
-    private String puzzleArrayToString(int[] puzzleArray) {
-        StringBuilder string = new StringBuilder();
-        string.append(puzzleArray[0]);
-        for (int i = 1; i < 81; i++) {
-            string.append(" " + puzzleArray[i]);
-        }
-        return string.toString();
-    }
-
+    // -------------------- Testing Move Legality ---------------------- //
     /**
      * Checks if all rows, columns and boxes are legal
+     *
      * @param candidate
      * @param puzzleArray
      * @param index
@@ -165,13 +270,14 @@ public class PuzzleGenerator extends Thread {
 
     /**
      * Checks if the row already contains the candidate
+     *
      * @param candidate
      * @param puzzleArray
      * @param index
      * @return false if it contains the candidate
      */
     private boolean isLegalMoveRow(int candidate, int[] puzzleArray, int index) {
-        
+
         // Gets the index of the first element of the row
         int baseIndex = 9 * (int) (index / 9);
 
@@ -185,13 +291,14 @@ public class PuzzleGenerator extends Thread {
 
     /**
      * Checks if the column already contains the candidate
+     *
      * @param candidate
      * @param puzzleArray
      * @param index
      * @return false if it contains the candidate
      */
     private boolean isLegalMoveColumn(int candidate, int[] puzzleArray, int index) {
-        
+
         // Gets how many elements into the row to be able to 
         // check the numbers below and above it
         int columnOffset = (int) (index % 9);
@@ -208,7 +315,7 @@ public class PuzzleGenerator extends Thread {
         return true;
     }
 
-    /**
+        /**
      * Checks if the box already contains the candidate
      * @param candidate
      * @param puzzleArray
@@ -236,6 +343,96 @@ public class PuzzleGenerator extends Thread {
             }
         }
         return true;
+    }
+
+    // --------------------- Auxilliary Functions ---------------------- //
+
+    /**
+     * Returns numbers 1 - 9 in random order (no replacement)
+     * @return 
+     */
+    private int[] candidates() {
+        int[] candidates = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        for (int i = 0; i < 20; i++) { // 20 shuffles
+            int index1 = (int) (Math.random() * 9);
+            int index2 = (int) (Math.random() * 9);
+            // Perform swap
+            int temp = candidates[index1];
+            candidates[index1] = candidates[index2];
+            candidates[index2] = temp;
+        }
+        return candidates;
+    }
+
+     
+    /**
+     * Returns random unmasked index
+     * @param maskArray
+     * @return 
+     */
+    private int getMaskingCandidate(boolean[] maskArray) {
+        int candidate;
+        while (true) {
+            candidate = (int) (Math.random() * 81);
+            System.out.println("candidate is: " + candidate);
+            if (!maskArray[candidate]) {
+                return candidate;
+            }
+        }
+    }
+
+ 
+    /**
+     * Returns string form of puzzleArray
+     * @param puzzleArray
+     * @return 
+     */
+    private String puzzleArrayToString(int[] puzzleArray) {
+        StringBuilder string = new StringBuilder();
+        string.append(puzzleArray[0]);
+        for (int i = 1; i < 81; i++) {
+            string.append(" " + puzzleArray[i]);
+        }
+        return string.toString();
+    }
+
+   
+    /**
+     * Returns string form of maskArray
+     * @param maskArray
+     * @return 
+     */
+    private String maskArrayToString(boolean[] maskArray) {
+        StringBuilder string = new StringBuilder();
+        if (maskArray[0]) {
+            string.append(1);
+        } else {
+            string.append(0);
+        }
+        for (int i = 1; i < 81; i++) {
+            string.append(" ");
+            if (maskArray[i]) {
+                string.append(1);
+            } else {
+                string.append(0);
+            }
+        }
+        return string.toString();
+    }
+
+    /**
+     * Gets the number of hints on the board
+     * @param maskArray
+     * @return 
+     */
+    private int countHints(boolean[] maskArray) {
+        int hints = 0;
+        for (int i = 0; i < 81; i++) {
+            if (!maskArray[i]) {
+                hints++;
+            }
+        }
+        return hints;
     }
 
 }

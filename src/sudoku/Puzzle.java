@@ -141,4 +141,50 @@ public class Puzzle {
         return this.maskString;
     }
 
+    /**
+     * 1: easy - 10 extra hints 2: medium - 5 extra hints 3: hard - no extra
+     * hints
+     *
+     * @param difficulty
+     */
+    public void setDifficulty(int difficulty) {
+        int extraHints = 0;
+        if (difficulty == 1) {
+            extraHints = 5;
+        }
+        if (difficulty == 2) {
+            extraHints = 10;
+        }
+
+        if (extraHints > 81 - countHints(mask)) {
+            extraHints = 81 - countHints(mask);
+        }
+
+        int indexToUnmask = (int) (Math.random() * 81);
+
+        while (extraHints > 0) {
+            if (mask[indexToUnmask]) {
+                mask[indexToUnmask] = false;
+                extraHints--;
+            } else {
+                indexToUnmask = (int) (Math.random() * 81);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param maskArray
+     * @return
+     */
+    private int countHints(boolean[] maskArray) {
+        int hints = 0;
+        for (int i = 0; i < 81; i++) {
+            if (!maskArray[i]) {
+                hints++;
+            }
+        }
+        return hints;
+    }
+
 }
